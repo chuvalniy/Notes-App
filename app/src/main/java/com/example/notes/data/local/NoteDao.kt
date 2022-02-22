@@ -1,8 +1,8 @@
-package com.example.notes.data
+package com.example.notes.data.local
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.example.notes.data.entity.NoteEntity
+import com.example.notes.data.local.entity.NoteEntity
 
 @Dao
 interface NoteDao {
@@ -11,7 +11,7 @@ interface NoteDao {
     fun getAllNotes(): LiveData<List<NoteEntity>>
 
     @Query("SELECT * FROM note_db WHERE id =:id")
-    fun getOneNote(id: Int): NoteEntity
+    suspend fun getOneNote(id: Int): NoteEntity
 
     @Delete
     suspend fun deleteNote(note: NoteEntity)
