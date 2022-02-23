@@ -4,6 +4,9 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/valen/AndroidStudioProjects/Notes/app/src/main/res/layout/activity_main.xml" value="0.22418478260869565" />
+        <entry key="..\:/Users/valen/AndroidStudioProjects/Notes/app/src/main/res/layout/adapter_note_item.xml" value="0.22418478260869565" />
+        <entry key="..\:/Users/valen/AndroidStudioProjects/Notes/app/src/main/res/layout/fragment_note_add.xml" value="0.22418478260869565" />
+        <entry key="..\:/Users/valen/AndroidStudioProjects/Notes/app/src/main/res/layout/fragment_note_list.xml" value="0.22418478260869565" />
       </map>
     </option>
   </component>
