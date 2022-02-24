@@ -1,6 +1,5 @@
 package com.example.notes.presentation.note_list
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -11,12 +10,14 @@ import com.example.notes.domain.model.Note
 import java.text.SimpleDateFormat
 
 class NoteListAdapter(
-    private var onDelete: (Note) -> Unit
+    private var onDelete: (Note) -> Unit,
+    private var onMoveToDetail: (Note) -> Unit
 ) : ListAdapter<Note, NoteListAdapter.NoteViewHolder>(DiffCallback) {
 
     class NoteViewHolder(
         private val binding: AdapterNoteItemBinding,
-        private var onDelete: (Note) -> Unit
+        private var onDelete: (Note) -> Unit,
+        private var onMoveToDetail: (Note) -> Unit
     ) :
         RecyclerView.ViewHolder(binding.root) {
 
@@ -33,6 +34,9 @@ class NoteListAdapter(
                 icDelete.setOnClickListener {
                     onDelete(note)
                 }
+                cvNoteItem.setOnClickListener {
+                    onMoveToDetail(note)
+                }
             }
         }
     }
@@ -44,7 +48,8 @@ class NoteListAdapter(
         val layoutInflater = LayoutInflater.from(parent.context)
         return NoteViewHolder(
             AdapterNoteItemBinding.inflate(layoutInflater, parent, false),
-            onDelete
+            onDelete,
+            onMoveToDetail
         )
     }
 
@@ -59,7 +64,7 @@ class NoteListAdapter(
         }
 
         override fun areContentsTheSame(oldItem: Note, newItem: Note): Boolean {
-            return oldItem.timestamp == oldItem.timestamp
+            return oldItem.id == oldItem.id
         }
 
     }

@@ -27,6 +27,11 @@ class NoteListFragment : BaseFragment<FragmentNoteListBinding>() {
         adapter = NoteListAdapter(
             onDelete = { note ->
                 viewModel.deleteNote(note)
+            },
+            onMoveToDetail = { note ->
+                val action = NoteListFragmentDirections
+                    .actionListToDetail(note.id!!)
+                findNavController().navigate(action)
             }
         )
 
