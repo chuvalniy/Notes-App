@@ -1,21 +1,13 @@
 package com.example.notes.domain.model
 
-import com.example.notes.data.local.entity.NoteEntity
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
+@Entity(tableName = "note_db")
 data class Note(
+    @PrimaryKey val id: Int? = null,
     val title: String,
     val content: String,
     val color: Int,
     val timestamp: Long,
-    val isImportant: Boolean
-)  {
-    fun toNoteEntity(): NoteEntity {
-        return NoteEntity(
-            title = title,
-            content = content,
-            color = color,
-            timestamp = timestamp,
-            isImportant = isImportant
-        )
-    }
-}
+)

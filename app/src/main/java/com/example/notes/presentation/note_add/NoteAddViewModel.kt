@@ -15,8 +15,8 @@ class NoteAddViewModel @Inject constructor(
     private val repository: NoteRepository
 ): ViewModel() {
 
-    private val _note = MutableLiveData<Note>()
-    val note: LiveData<Note> get() = _note
+    private val _noteItem = MutableLiveData<Note>()
+    val noteItem: LiveData<Note> get() = _noteItem
 
     fun insertNote(note: Note) {
         viewModelScope.launch {

@@ -24,7 +24,11 @@ class NoteListFragment : BaseFragment<FragmentNoteListBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = NoteListAdapter()
+        adapter = NoteListAdapter(
+            onDelete = { note ->
+                viewModel.deleteNote(note)
+            }
+        )
 
         viewModel.notes.observe(viewLifecycleOwner) { notes ->
             notes.let {
