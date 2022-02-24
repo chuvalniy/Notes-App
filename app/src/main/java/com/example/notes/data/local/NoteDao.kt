@@ -1,24 +1,24 @@
 package com.example.notes.data.local
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.example.notes.data.local.entity.NoteEntity
+import com.example.notes.domain.model.Note
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface NoteDao {
 
     @Query("SELECT * FROM note_db")
-    fun getAllNotes(): LiveData<List<NoteEntity>>
+    fun getAllNotes(): Flow<List<Note>>
 
     @Query("SELECT * FROM note_db WHERE id =:id")
-    suspend fun getOneNote(id: Int): NoteEntity
+    suspend fun getOneNote(id: Int): Note
 
     @Delete
-    suspend fun deleteNote(note: NoteEntity)
+    suspend fun deleteNote(note: Note)
 
     @Insert
-    suspend fun insertNote(note: NoteEntity)
+    suspend fun insertNote(note: Note)
 
     @Update
-    suspend fun updateNote(note: NoteEntity)
+    suspend fun updateNote(note: Note)
 }
