@@ -6,4 +6,6 @@
     <string name="enter_description">Enter description...</string>
     <string name="create">Create</string>
     <string name="current_color">Current color:</string>
+    <string name="oldest">Oldest</string>
+    <string name="newest">Newest</string>
 </resources>

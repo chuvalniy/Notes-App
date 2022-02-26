@@ -8,6 +8,14 @@
     android:padding="16dp"
     tools:context=".presentation.note_add.NoteAddFragment">
 
+    <Button
+        android:id="@+id/btnAddNote"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:text="@string/create" />
+
     <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
@@ -43,15 +51,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/current_color"/>
-
-
-    <Button
-        android:id="@+id/btnAddNote"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:text="@string/create" />
 
 
 </LinearLayout>

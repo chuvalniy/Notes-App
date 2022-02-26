@@ -1,13 +1,13 @@
 package com.example.notes.presentation.note_list
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.notes.domain.model.Note
 import com.example.notes.domain.repository.NoteRepository
+import com.example.notes.domain.util.SortType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -16,7 +16,23 @@ class NoteListViewModel @Inject constructor(
     private val repository: NoteRepository
 ) : ViewModel() {
 
-    val notes: LiveData<List<Note>> = repository.getAllNotes().asLiveData()
+    private val _notesState = MutableLiveData<NoteListState>()
+    val notesState: LiveData<NoteListState> = _notesState
+
+    init {
+        getNotes(sortType = SortType.Descending)
+    }
+
+    fun getNotes(sortType: SortType) {
+        repository.getAllNotes(sortType)
+            .onEach { notes ->
+                _notesState.value = NoteListState(
+                    notes = notes,
+                    sortType = sortType
+                )
+            }
+            .launchIn(viewModelScope)
+    }
 
     fun deleteNote(note: Note) {
         viewModelScope.launch(Dispatchers.IO) {
