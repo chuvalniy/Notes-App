@@ -8,4 +8,5 @@
     <string name="current_color">Current color:</string>
     <string name="oldest">Oldest</string>
     <string name="newest">Newest</string>
+    <string name="save">Save</string>
 </resources>

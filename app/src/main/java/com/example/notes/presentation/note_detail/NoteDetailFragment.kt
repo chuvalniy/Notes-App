@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.notes.BaseFragment
 import com.example.notes.R
@@ -38,6 +39,12 @@ class NoteDetailFragment : BaseFragment<FragmentNoteDetailBinding>() {
                 tvTitle.text = note.title
                 tvContent.text = note.content
             }
+        }
+
+        binding.fabEditNote.setOnClickListener {
+            val action = NoteDetailFragmentDirections
+                .actionDetailToAddEdit(note.id!!)
+            findNavController().navigate(action)
         }
     }
 

@@ -1,9 +1,6 @@
 package com.example.notes.presentation.note_add
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.notes.domain.model.Note
 import com.example.notes.domain.repository.NoteRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,6 +15,16 @@ class NoteAddViewModel @Inject constructor(
     fun insertNote(note: Note) {
         viewModelScope.launch {
             repository.insertNote(note)
+        }
+    }
+
+    fun getOneNote(id: Int): LiveData<Note> {
+        return repository.getOneNote(id).asLiveData()
+    }
+
+    fun updateNote(note: Note) {
+        viewModelScope.launch {
+            repository.updateNote(note)
         }
     }
 }
