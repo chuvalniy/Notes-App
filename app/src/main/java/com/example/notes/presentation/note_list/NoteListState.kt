@@ -6,4 +6,5 @@ import com.example.notes.domain.util.SortType
 data class NoteListState(
     val notes: List<Note> = emptyList(),
     val sortType: SortType = SortType.Descending
+
 )

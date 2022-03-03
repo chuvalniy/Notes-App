@@ -7,9 +7,11 @@ import kotlinx.coroutines.flow.Flow
 
 interface NoteRepository {
 
-    fun getAllNotes(sortType: SortType = SortType.Descending): Flow<List<Note>>
+    fun getAllNotes(sortType: SortType = SortType.Ascending): Flow<List<Note>>
 
     fun getOneNote(id: Int): Flow<Note>
+
+    fun searchDatabase(searchQuery: String): Flow<List<Note>>
 
     suspend fun insertNote(note: Note)
 

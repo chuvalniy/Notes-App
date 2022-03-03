@@ -13,6 +13,9 @@ interface NoteDao {
     @Query("SELECT * FROM note_db WHERE id =:id")
     fun getOneNote(id: Int): Flow<Note>
 
+    @Query("SELECT * FROM note_db WHERE title LIKE :searchQuery")
+    fun searchDatabase(searchQuery: String): Flow<List<Note>>
+
     @Delete
     suspend fun deleteNote(note: Note)
 

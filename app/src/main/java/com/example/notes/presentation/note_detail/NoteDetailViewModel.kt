@@ -12,8 +12,6 @@ class NoteDetailViewModel @Inject constructor(
     private val repository: NoteRepository
 ) : ViewModel() {
 
-    private val _noteItem = MutableLiveData<Note>()
-    val noteItem: LiveData<Note> get() = _noteItem
 
     fun deleteNote(note: Note) {
         viewModelScope.launch {

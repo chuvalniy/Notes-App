@@ -1,52 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/semi_black"
     android:orientation="vertical"
     android:padding="16dp"
     tools:context=".presentation.note_add.NoteAddFragment">
 
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/enter_title"
-        app:counterEnabled="true"
-        app:counterMaxLength="30">
+        android:orientation="horizontal">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+        <ImageView
+            android:id="@+id/btnGoBack"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@drawable/searchview_background"
+            android:contentDescription="@string/go_back"
+            android:padding="12dp"
+            android:src="@drawable/ic_baseline_arrow_back" />
 
-    </com.google.android.material.textfield.TextInputLayout>
+        <ImageView
+            android:id="@+id/btnAddNote"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:background="@drawable/searchview_background"
+            android:contentDescription="@string/add_note"
+            android:padding="12dp"
+            android:src="@drawable/ic_baseline_done" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+
+    </FrameLayout>
+
+    <EditText
+        android:id="@+id/edTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/enter_description">
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="@null"
+        android:hint="@string/title"
+        android:inputType="text"
+        android:minHeight="48dp"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        android:textSize="40sp" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edContent"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:ellipsize="start"
-            android:gravity="start" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-
-    <Button
-        android:id="@+id/btnAddNote"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/edContent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:text="@string/save" />
-
-
+        android:background="@null"
+        android:hint="@string/enter_description"
+        android:inputType="text"
+        android:minHeight="48dp"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        android:textSize="20sp" />
 
 </LinearLayout>

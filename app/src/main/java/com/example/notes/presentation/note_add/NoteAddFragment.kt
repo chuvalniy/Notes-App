@@ -1,10 +1,10 @@
 package com.example.notes.presentation.note_add
 
-import android.content.res.Resources
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -31,52 +31,49 @@ class NoteAddFragment : BaseFragment<FragmentNoteAddBinding>() {
         if (id > 0) {
             viewModel.getOneNote(id).observe(this.viewLifecycleOwner) { selectedNote ->
                 note = selectedNote
-                binding.apply {
-                    edTitle.setText(selectedNote.title)
-                    edContent.setText(selectedNote.content)
-                    btnAddNote.setOnClickListener {
-                        updateNote()
-                    }
-                }
+                bindUpdate(note)
             }
-        }
-
-        binding.btnAddNote.setOnClickListener {
-            insertNote()
+        } else {
+            binding.btnAddNote.setOnClickListener {
+                insertNote()
+            }
         }
     }
 
+    private fun bindUpdate(note: Note) {
+        binding.apply {
+            edTitle.setText(note.title)
+            edContent.setText(note.content)
+            btnAddNote.setOnClickListener {
+                updateNote()
+            }
+        }
+    }
 
     private fun updateNote() {
         viewModel.updateNote(
             Note(
                 id = navigationArgs.id,
                 title = binding.edTitle.text.toString(),
-                content = binding.edContent.text.toString(),
-                color = 123,
-                timestamp = System.currentTimeMillis() / 1000L
+                content = binding.edContent.text.toString()
             )
         )
-        findNavController().navigate(
-            R.id.action_add_edit_to_list
-        )
+        findNavController().navigate(R.id.action_add_edit_to_list)
     }
 
     private fun insertNote() {
         viewModel.insertNote(
             Note(
                 title = binding.edTitle.text.toString(),
-                content = binding.edContent.text.toString(),
-                color = 123,
-                timestamp = System.currentTimeMillis() / 1000L
+                content = binding.edContent.text.toString()
             )
         )
         findNavController().navigate(R.id.action_add_edit_to_list)
     }
 
-
     override fun initBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
     ) = FragmentNoteAddBinding.inflate(inflater, container, false)
+
 }

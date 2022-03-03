@@ -2,9 +2,11 @@ package com.example.notes.presentation.note_list
 
 
 import android.os.Bundle
-import android.util.Log
-import android.view.*
-import android.widget.Toast
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.PopupMenu
+import android.widget.SearchView
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.notes.BaseFragment
@@ -19,12 +21,6 @@ class NoteListFragment : BaseFragment<FragmentNoteListBinding>() {
     private lateinit var adapter: NoteListAdapter
 
     private val viewModel: NoteListViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        setHasOptionsMenu(true)
-        super.onCreate(savedInstanceState)
-    }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -46,31 +42,74 @@ class NoteListFragment : BaseFragment<FragmentNoteListBinding>() {
             }
         }
 
-        binding.fabAddNote.setOnClickListener {
-            findNavController().navigate(R.id.action_noteListFragment_to_noteAddFragment)
+        binding.apply {
+            fabAddNote.setOnClickListener {
+                findNavController().navigate(R.id.action_noteListFragment_to_noteAddFragment)
+            }
+            rvNoteList.adapter = adapter
         }
 
-        binding.rvNoteList.adapter = adapter
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.toolbar_menu, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.sortDescending -> {
-                viewModel.getNotes(SortType.Descending)
+        binding.searchNote.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (query != null) {
+                    searchDatabase(query)
+                }
+                return true
             }
-            R.id.sortAscending -> {
-                viewModel.getNotes(SortType.Ascending)
+
+            override fun onQueryTextChange(query: String?): Boolean {
+                if (query != null) {
+                    searchDatabase(query)
+                }
+                return true
+            }
+        })
+
+        popupMenu()
+    }
+
+    private fun popupMenu() {
+        val popupMenu = PopupMenu(activity, binding.icSort)
+        popupMenu.inflate(R.menu.popup_menu)
+        popupMenu.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.newest -> {
+                    viewModel.getNotes(SortType.Descending)
+                    true
+                }
+                R.id.oldest -> {
+                    viewModel.getNotes(SortType.Ascending)
+                    true
+                }
+                else -> true
             }
         }
 
-        return super.onOptionsItemSelected(item)
+        binding.icSort.setOnClickListener {
+            try {
+                val popup = PopupMenu::class.java.getDeclaredField("mPopup")
+                popup.isAccessible = true
+                val menu = popup.get(popupMenu)
+                menu.javaClass
+                    .getDeclaredMethod("setForceShowIcon", Boolean::class.java)
+                    .invoke(menu, true)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            } finally {
+                popupMenu.show()
+            }
+        }
     }
 
+    private fun searchDatabase(query: String) {
+        val searchQuery = "%$query%"
+
+        viewModel.searchDatabase(searchQuery).observe(this.viewLifecycleOwner) { notes ->
+            notes.let {
+                adapter.submitList(it)
+            }
+        }
+    }
 
     override fun initBinding(
         inflater: LayoutInflater,

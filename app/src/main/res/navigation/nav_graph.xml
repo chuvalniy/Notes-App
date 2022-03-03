@@ -12,7 +12,8 @@
         tools:layout="@layout/fragment_note_add" >
         <action
             android:id="@+id/action_add_edit_to_list"
-            app:destination="@id/list" />
+            app:destination="@id/list"
+            app:popUpTo="@id/list" />
         <argument
             android:name="id"
             app:argType="integer"
@@ -28,7 +29,8 @@
             app:destination="@id/add_edit" />
         <action
             android:id="@+id/action_list_to_detail"
-            app:destination="@id/detail" />
+            app:destination="@id/detail"
+            app:popUpTo="@id/list" />
     </fragment>
     <fragment
         android:id="@+id/detail"
@@ -42,5 +44,8 @@
             android:name="id"
             app:argType="integer"
             android:defaultValue="0" />
+        <action
+            android:id="@+id/action_detail_to_list"
+            app:destination="@id/list" />
     </fragment>
 </navigation>

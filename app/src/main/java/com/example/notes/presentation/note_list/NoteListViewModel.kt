@@ -20,7 +20,7 @@ class NoteListViewModel @Inject constructor(
     val notesState: LiveData<NoteListState> = _notesState
 
     init {
-        getNotes(sortType = SortType.Descending)
+        getNotes(sortType = SortType.Ascending)
     }
 
     fun getNotes(sortType: SortType) {
@@ -38,5 +38,9 @@ class NoteListViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteNote(note)
         }
+    }
+
+    fun searchDatabase(searchQuery: String): LiveData<List<Note>> {
+        return repository.searchDatabase(searchQuery).asLiveData()
     }
 }

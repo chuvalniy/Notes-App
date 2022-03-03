@@ -1,5 +1,6 @@
 package com.example.notes.domain.model
 
+import androidx.compose.ui.graphics.Color
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -8,6 +9,5 @@ data class Note(
     @PrimaryKey val id: Int? = null,
     val title: String,
     val content: String,
-    val color: Int,
-    val timestamp: Long,
+    val timestamp: Long = System.currentTimeMillis() / 1000L
 )

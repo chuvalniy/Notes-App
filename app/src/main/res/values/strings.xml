@@ -2,11 +2,20 @@
     <string name="app_name">Notes</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="enter_title">Enter title...</string>
-    <string name="enter_description">Enter description...</string>
+    <string name="enter_title">Enter title…</string>
+    <string name="enter_description">Enter description…</string>
     <string name="create">Create</string>
     <string name="current_color">Current color:</string>
     <string name="oldest">Oldest</string>
     <string name="newest">Newest</string>
     <string name="save">Save</string>
+    <string name="add_theme">Add theme</string>
+    <string name="new_note">New note</string>
+    <string name="back">Back</string>
+    <string name="title">Title</string>
+    <string name="go_back">Go back</string>
+    <string name="add_note">Add note</string>
+    <string name="delete_note">Delete note</string>
+    <string name="edit_note">Edit note</string>
+    <string name="sort_by">Sort by</string>
 </resources>
