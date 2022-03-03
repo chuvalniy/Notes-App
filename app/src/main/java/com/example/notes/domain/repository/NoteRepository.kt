@@ -2,13 +2,16 @@ package com.example.notes.domain.repository
 
 import androidx.lifecycle.LiveData
 import com.example.notes.domain.model.Note
+import com.example.notes.domain.util.SortType
 import kotlinx.coroutines.flow.Flow
 
 interface NoteRepository {
 
-    fun getAllNotes(): Flow<List<Note>>
+    fun getAllNotes(sortType: SortType = SortType.Ascending): Flow<List<Note>>
 
     fun getOneNote(id: Int): Flow<Note>
+
+    fun searchDatabase(searchQuery: String): Flow<List<Note>>
 
     suspend fun insertNote(note: Note)
 

@@ -31,9 +31,6 @@ class NoteListAdapter(
             binding.apply {
                 tvTitle.text = note.title
                 tvDate.text = getDateString(note.timestamp)
-                icDelete.setOnClickListener {
-                    onDelete(note)
-                }
                 cvNoteItem.setOnClickListener {
                     onMoveToDetail(note)
                 }
