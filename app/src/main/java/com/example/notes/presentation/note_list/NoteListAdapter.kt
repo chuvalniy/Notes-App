@@ -2,6 +2,7 @@ package com.example.notes.presentation.note_list
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -10,12 +11,12 @@ import com.example.notes.domain.model.Note
 import com.example.notes.utils.getDateString
 
 class NoteListAdapter(
-    private var onMoveToDetail: (Note) -> Unit
+    private var onMoveToDetail: (Note) -> Unit,
 ) : ListAdapter<Note, NoteListAdapter.NoteViewHolder>(DiffCallback) {
 
     class NoteViewHolder(
         private val binding: AdapterNoteItemBinding,
-        private var onMoveToDetail: (Note) -> Unit
+        private var onMoveToDetail: (Note) -> Unit,
     ) :
         RecyclerView.ViewHolder(binding.root) {
 
@@ -59,6 +60,5 @@ class NoteListAdapter(
         override fun areContentsTheSame(oldItem: Note, newItem: Note): Boolean {
             return oldItem.id == oldItem.id
         }
-
     }
 }

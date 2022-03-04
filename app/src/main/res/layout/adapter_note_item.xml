@@ -3,20 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/bottom_margin">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cvNoteItem"
         android:layout_width="match_parent"
-        android:layout_height="175dp"
-
-        android:layout_margin="16dp"
-        app:cardCornerRadius="10dp">
+        android:layout_height="@dimen/card_height"
+        app:cardCornerRadius="@dimen/card_corner_radius">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="12dp"
+            android:layout_margin="@dimen/card_margin"
             android:orientation="horizontal">
 
             <TextView
@@ -26,9 +25,9 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="top"
                 android:layout_weight="1"
-                android:autoSizeMaxTextSize="40sp"
-                android:autoSizeMinTextSize="12sp"
-                android:autoSizeStepGranularity="2sp"
+                android:autoSizeMaxTextSize="@dimen/auti_size_max_text_size"
+                android:autoSizeMinTextSize="@dimen/auto_size_min_text_size"
+                android:autoSizeStepGranularity="@dimen/auto_size_step_granularity"
                 android:autoSizeTextType="uniform"
                 tools:text="Title" />
 
@@ -38,12 +37,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="bottom"
-                android:paddingStart="8dp"
+                android:paddingStart="@dimen/date_start_padding"
                 tools:text="May 21, 2020" />
 
-
         </LinearLayout>
-
 
     </androidx.cardview.widget.CardView>
 

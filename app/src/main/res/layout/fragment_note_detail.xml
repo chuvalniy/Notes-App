@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/semi_black"
     android:orientation="vertical"
+    android:padding="@dimen/screen_padding"
     tools:context=".presentation.note_detail.NoteDetailFragment">
 
     <ScrollView
@@ -14,7 +15,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
             android:orientation="vertical">
 
             <FrameLayout
@@ -22,13 +22,12 @@
                 android:layout_height="wrap_content">
 
                 <ImageView
-                    android:contentDescription="@string/go_back"
                     android:id="@+id/btnGoBack"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginEnd="12dp"
                     android:background="@drawable/searchview_background"
-                    android:padding="12dp"
+                    android:contentDescription="@string/go_back"
+                    android:padding="@dimen/icon_padding"
                     android:src="@drawable/ic_baseline_arrow_back" />
 
                 <LinearLayout
@@ -38,23 +37,23 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:contentDescription="@string/delete_note"
                         android:id="@+id/btnDelete"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_marginEnd="16dp"
+                        android:layout_marginEnd="@dimen/icon_end_margin"
                         android:background="@drawable/searchview_background"
-                        android:padding="12dp"
+                        android:contentDescription="@string/delete_note"
+                        android:padding="@dimen/icon_padding"
                         android:src="@drawable/ic_delete" />
 
 
                     <ImageView
-                        android:contentDescription="@string/edit_note"
                         android:id="@+id/btnEdit"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:background="@drawable/searchview_background"
-                        android:padding="12dp"
+                        android:contentDescription="@string/edit_note"
+                        android:padding="@dimen/icon_padding"
                         android:src="@drawable/ic_edit" />
 
                 </LinearLayout>
@@ -64,27 +63,24 @@
 
             <TextView
                 android:id="@+id/tvTitle"
+                style="@style/TitleTextStyling"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white"
-                android:textSize="40sp"
+                android:layout_marginTop="@dimen/text_view_top_margin"
+                android:minHeight="@dimen/min_height"
                 tools:text="Title" />
 
             <TextView
                 android:id="@+id/tvContent"
+                style="@style/ContentTextStyling"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white"
-                android:textSize="20sp"
+                android:layout_marginTop="@dimen/text_view_top_margin"
+                android:minHeight="@dimen/min_height"
                 tools:text="Content" />
 
         </LinearLayout>
 
     </ScrollView>
-
 
 </FrameLayout>
