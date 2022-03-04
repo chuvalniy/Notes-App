@@ -17,10 +17,10 @@ class NoteRepositoryImpl(
             dao.insertNote(
                 Note(
                     title = "New note",
-                    content = note.content
+                    content = note.content,
+                    color = note.color
                 )
             )
-
         } else {
             dao.insertNote(note)
         }
@@ -32,7 +32,8 @@ class NoteRepositoryImpl(
                 Note(
                     id = note.id,
                     title = "New note",
-                    content = note.content
+                    content = note.content,
+                    color = note.color
                 )
             )
         } else {
