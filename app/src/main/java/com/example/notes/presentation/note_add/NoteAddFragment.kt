@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -38,6 +38,9 @@ class NoteAddFragment : BaseFragment<FragmentNoteAddBinding>() {
                 insertNote()
             }
         }
+        binding.btnGoBack.setOnClickListener {
+            findNavController().navigate(R.id.action_add_edit_to_list)
+        }
     }
 
     private fun bindUpdate(note: Note) {
@@ -55,7 +58,11 @@ class NoteAddFragment : BaseFragment<FragmentNoteAddBinding>() {
             Note(
                 id = navigationArgs.id,
                 title = binding.edTitle.text.toString(),
-                content = binding.edContent.text.toString()
+                content = binding.edContent.text.toString(),
+                color = ContextCompat.getColor(
+                    requireActivity(),
+                    Note.colors.random()
+                )
             )
         )
         findNavController().navigate(R.id.action_add_edit_to_list)
@@ -65,7 +72,11 @@ class NoteAddFragment : BaseFragment<FragmentNoteAddBinding>() {
         viewModel.insertNote(
             Note(
                 title = binding.edTitle.text.toString(),
-                content = binding.edContent.text.toString()
+                content = binding.edContent.text.toString(),
+                color = ContextCompat.getColor(
+                    requireActivity(),
+                    Note.colors.random()
+                )
             )
         )
         findNavController().navigate(R.id.action_add_edit_to_list)

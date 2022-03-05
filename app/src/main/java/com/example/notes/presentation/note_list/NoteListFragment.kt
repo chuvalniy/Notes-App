@@ -26,9 +26,6 @@ class NoteListFragment : BaseFragment<FragmentNoteListBinding>() {
         super.onViewCreated(view, savedInstanceState)
 
         adapter = NoteListAdapter(
-            onDelete = { note ->
-                viewModel.deleteNote(note)
-            },
             onMoveToDetail = { note ->
                 val action = NoteListFragmentDirections
                     .actionListToDetail(note.id!!)
@@ -43,27 +40,26 @@ class NoteListFragment : BaseFragment<FragmentNoteListBinding>() {
         }
 
         binding.apply {
+            rvNoteList.adapter = adapter
             fabAddNote.setOnClickListener {
                 findNavController().navigate(R.id.action_noteListFragment_to_noteAddFragment)
             }
-            rvNoteList.adapter = adapter
+            searchNote.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    if (query != null) {
+                        searchDatabase(query)
+                    }
+                    return true
+                }
+
+                override fun onQueryTextChange(query: String?): Boolean {
+                    if (query != null) {
+                        searchDatabase(query)
+                    }
+                    return true
+                }
+            })
         }
-
-        binding.searchNote.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                if (query != null) {
-                    searchDatabase(query)
-                }
-                return true
-            }
-
-            override fun onQueryTextChange(query: String?): Boolean {
-                if (query != null) {
-                    searchDatabase(query)
-                }
-                return true
-            }
-        })
 
         popupMenu()
     }

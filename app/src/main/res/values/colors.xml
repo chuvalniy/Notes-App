@@ -6,12 +6,17 @@
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
-<!--    <color name="white">#FFFFFFFF</color>-->
 
     <color name="white">#FFFBFBFB</color>
     <color name="semi_black">#FF252525</color>
-    <color name="gray">#FF828282</color>
+    <color name="gray">#FF474648</color>
     <color name="gray_secondary">#FF3B3B3B</color>
 
-    <color name="light_orange">#FFFFAB91</color>
+<!--    Card colors-->
+
+    <color name="light_orange">#FFFFCC80</color>
+    <color name="light_red">#FFFFAB91</color>
+    <color name="light_green">#FFE7ED9B</color>
+    <color name="light_purple">#FFCF94DA</color>
+    <color name="light_blue">#FF81DEEA</color>
 </resources>
