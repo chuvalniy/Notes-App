@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/semi_black"
-    tools:context=".presentation.note_list.NoteListFragment"
-    android:padding="@dimen/screen_padding">
+    android:padding="@dimen/screen_padding"
+    tools:context=".presentation.note_list.NoteListFragment">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -40,12 +40,12 @@
 
 
                 <ImageView
-                    android:contentDescription="@string/sort_by"
                     android:id="@+id/icSort"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
                     android:background="@drawable/searchview_background"
+                    android:contentDescription="@string/sort_by"
                     android:padding="@dimen/icon_padding"
                     android:src="@drawable/ic_sort"
                     app:tint="@color/white" />
@@ -75,6 +75,7 @@
         android:focusable="true"
         android:text="@string/new_note"
         app:icon="@drawable/ic_add"
-        app:iconTint="@color/white"/>
+        app:iconTint="@color/white" />
+
 
 </FrameLayout>

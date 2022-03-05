@@ -38,6 +38,9 @@ class NoteAddFragment : BaseFragment<FragmentNoteAddBinding>() {
                 insertNote()
             }
         }
+        binding.btnGoBack.setOnClickListener {
+            findNavController().navigate(R.id.action_add_edit_to_list)
+        }
     }
 
     private fun bindUpdate(note: Note) {

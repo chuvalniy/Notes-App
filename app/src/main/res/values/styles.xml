@@ -38,7 +38,10 @@
     <style name="AppSearchView" parent="Widget.AppCompat.SearchView">
         <item name="android:fontFamily">@font/quattrosentosans_regular</item>
         <item name="android:textColorHint">@android:color/white</item>
+        <item name="android:editTextColor">@android:color/white</item>
         <item name="android:textSize">20sp</item>
+        <item name="colorControlActivated">@android:color/white</item>
+        <item name="android:tint">@color/white</item>
     </style>
 
     <style name="FabShapeAppearance" parent="ShapeAppearance.MaterialComponents.SmallComponent">

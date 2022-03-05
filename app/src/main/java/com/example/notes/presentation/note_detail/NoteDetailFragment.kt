@@ -49,6 +49,9 @@ class NoteDetailFragment : BaseFragment<FragmentNoteDetailBinding>() {
                 .actionDetailToAddEdit(note.id!!)
             findNavController().navigate(action)
         }
+        binding.btnGoBack.setOnClickListener {
+            findNavController().navigate(R.id.action_detail_to_list)
+        }
     }
 
 }
