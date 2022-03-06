@@ -10,15 +10,25 @@
         <entry key="..\:/Users/valen/AndroidStudioProjects/Notes/app/src/main/res/drawable/ic_add.xml" value="0.1435" />
         <entry key="..\:/Users/valen/AndroidStudioProjects/Notes/app/src/main/res/drawable/ic_baseline_arrow_back.xml" value="0.1435" />
         <entry key="..\:/Users/valen/AndroidStudioProjects/Notes/app/src/main/res/drawable/ic_baseline_done.xml" value="0.122" />
+        <entry key="..\:/Users/valen/AndroidStudioProjects/Notes/app/src/main/res/drawable/ic_baseline_edit_note.xml" value="0.164" />
+        <entry key="..\:/Users/valen/AndroidStudioProjects/Notes/app/src/main/res/drawable/ic_baseline_note_add.xml" value="0.164" />
+        <entry key="..\:/Users/valen/AndroidStudioProjects/Notes/app/src/main/res/drawable/ic_baseline_note_alt.xml" value="0.164" />
         <entry key="..\:/Users/valen/AndroidStudioProjects/Notes/app/src/main/res/drawable/ic_delete.xml" value="0.1435" />
         <entry key="..\:/Users/valen/AndroidStudioProjects/Notes/app/src/main/res/drawable/ic_edit.xml" value="0.1435" />
         <entry key="..\:/Users/valen/AndroidStudioProjects/Notes/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1435" />
+        <entry key="..\:/Users/valen/AndroidStudioProjects/Notes/app/src/main/res/drawable/ic_notas.xml" value="0.164" />
         <entry key="..\:/Users/valen/AndroidStudioProjects/Notes/app/src/main/res/drawable/searchview_background.xml" value="0.1435" />
         <entry key="..\:/Users/valen/AndroidStudioProjects/Notes/app/src/main/res/layout/activity_main.xml" value="0.22418478260869565" />
+        <entry key="..\:/Users/valen/AndroidStudioProjects/Notes/app/src/main/res/layout/activity_splash_screen.xml" value="0.22418478260869565" />
+        <entry key="..\:/Users/valen/AndroidStudioProjects/Notes/app/src/main/res/layout/activity_splash_screen2.xml" value="0.22418478260869565" />
+        <entry key="..\:/Users/valen/AndroidStudioProjects/Notes/app/src/main/res/layout/activity_splash_screen3.xml" value="0.22418478260869565" />
         <entry key="..\:/Users/valen/AndroidStudioProjects/Notes/app/src/main/res/layout/adapter_note_item.xml" value="0.264" />
+        <entry key="..\:/Users/valen/AndroidStudioProjects/Notes/app/src/main/res/layout/content_splash_screen.xml" value="0.22418478260869565" />
+        <entry key="..\:/Users/valen/AndroidStudioProjects/Notes/app/src/main/res/layout/fragment_first.xml" value="0.22418478260869565" />
         <entry key="..\:/Users/valen/AndroidStudioProjects/Notes/app/src/main/res/layout/fragment_note_add.xml" value="0.264" />
         <entry key="..\:/Users/valen/AndroidStudioProjects/Notes/app/src/main/res/layout/fragment_note_detail.xml" value="0.264" />
         <entry key="..\:/Users/valen/AndroidStudioProjects/Notes/app/src/main/res/layout/fragment_note_list.xml" value="0.264" />
+        <entry key="..\:/Users/valen/AndroidStudioProjects/Notes/app/src/main/res/layout/fragment_second.xml" value="0.22418478260869565" />
         <entry key="..\:/Users/valen/AndroidStudioProjects/Notes/app/src/main/res/menu/popup_menu.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/valen/AndroidStudioProjects/Notes/app/src/main/res/menu/toolbar_menu.xml" value="0.25416666666666665" />
       </map>

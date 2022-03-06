@@ -2,18 +2,17 @@ package com.example.notes.presentation.note_list
 
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.SearchView
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.notes.BaseFragment
 import com.example.notes.R
 import com.example.notes.databinding.FragmentNoteListBinding
-import com.example.notes.domain.util.SortType
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -110,7 +109,7 @@ class NoteListFragment : BaseFragment<FragmentNoteListBinding>() {
         val searchQuery = "%$query%"
 
         viewModel.searchDatabase(searchQuery).observe(this.viewLifecycleOwner) { notes ->
-            notes.let {
+            notes?.let {
                 adapter.submitList(it)
             }
         }

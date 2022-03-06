@@ -1,11 +1,8 @@
 <resources>
     <string name="app_name">Notes</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="enter_title">Enter title…</string>
     <string name="enter_description">Enter description…</string>
     <string name="create">Create</string>
-    <string name="current_color">Current color:</string>
     <string name="oldest">Oldest</string>
     <string name="newest">Newest</string>
     <string name="save">Save</string>
@@ -19,5 +16,6 @@
     <string name="edit_note">Edit note</string>
     <string name="sort_by">Sort by</string>
     <string name="queryHint">Enter note title…</string>
-    <string name="emptyNoteTitle">%d #%d</string>
+    <string name="title_activity_splash_screen">SplashScreenActivity</string>
+
 </resources>
