@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="screen_padding">16dp</dimen>
+    <dimen name="screen_margin">16dp</dimen>
     <dimen name="icon_padding">12dp</dimen>
     <dimen name="card_corner_radius">12dp</dimen>
     <dimen name="card_margin">12dp</dimen>

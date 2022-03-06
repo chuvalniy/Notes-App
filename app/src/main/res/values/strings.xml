@@ -18,5 +18,6 @@
     <string name="delete_note">Delete note</string>
     <string name="edit_note">Edit note</string>
     <string name="sort_by">Sort by</string>
-    <string name="queryHint">Enter note title...</string>
+    <string name="queryHint">Enter note title…</string>
+    <string name="emptyNoteTitle">%d #%d</string>
 </resources>

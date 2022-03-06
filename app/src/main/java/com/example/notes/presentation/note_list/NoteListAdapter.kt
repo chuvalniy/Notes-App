@@ -2,13 +2,11 @@ package com.example.notes.presentation.note_list
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.notes.databinding.AdapterNoteItemBinding
 import com.example.notes.domain.model.Note
-import com.example.notes.utils.getDateString
 
 class NoteListAdapter(
     private var onMoveToDetail: (Note) -> Unit,
@@ -22,7 +20,8 @@ class NoteListAdapter(
 
         fun bind(note: Note) {
             binding.apply {
-                tvDate.text = getDateString(note.timestamp)
+//                tvDate.text = getDateString(note.timestamp)
+                tvDate.text = note.timestamp.toString()
                 cvNoteItem.setOnClickListener {
                     onMoveToDetail(note)
                 }

@@ -1,5 +1,6 @@
 package com.example.notes.presentation.note_list
 
+import android.util.Log
 import androidx.lifecycle.*
 import com.example.notes.domain.model.Note
 import com.example.notes.domain.repository.NoteRepository
@@ -16,31 +17,10 @@ class NoteListViewModel @Inject constructor(
     private val repository: NoteRepository
 ) : ViewModel() {
 
-    private val _notesState = MutableLiveData<NoteListState>()
-    val notesState: LiveData<NoteListState> = _notesState
+    val notes = repository.getAllNotes().asLiveData()
 
-    init {
-        getNotes(sortType = SortType.Ascending)
-    }
+    val notesByAscending = repository.getAllNotesByAsc().asLiveData()
+    val notesByDescending = repository.getAllNotesByDesc().asLiveData()
 
-    fun getNotes(sortType: SortType) {
-        repository.getAllNotes(sortType)
-            .onEach { notes ->
-                _notesState.value = NoteListState(
-                    notes = notes,
-                    sortType = sortType
-                )
-            }
-            .launchIn(viewModelScope)
-    }
-
-    fun deleteNote(note: Note) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.deleteNote(note)
-        }
-    }
-
-    fun searchDatabase(searchQuery: String): LiveData<List<Note>> {
-        return repository.searchDatabase(searchQuery).asLiveData()
-    }
+    fun searchDatabase(searchQuery: String) = repository.searchDatabase(searchQuery).asLiveData()
 }

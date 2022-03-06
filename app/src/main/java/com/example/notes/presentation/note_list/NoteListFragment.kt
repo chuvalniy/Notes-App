@@ -2,6 +2,7 @@ package com.example.notes.presentation.note_list
 
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,9 +34,9 @@ class NoteListFragment : BaseFragment<FragmentNoteListBinding>() {
             }
         )
 
-        viewModel.notesState.observe(viewLifecycleOwner) { notes ->
-            notes.let {
-                adapter.submitList(it.notes)
+        viewModel.notes.observe(viewLifecycleOwner) { notes ->
+            notes?.let {
+                adapter.submitList(it)
             }
         }
 
@@ -67,14 +68,22 @@ class NoteListFragment : BaseFragment<FragmentNoteListBinding>() {
     private fun popupMenu() {
         val popupMenu = PopupMenu(activity, binding.icSort)
         popupMenu.inflate(R.menu.popup_menu)
-        popupMenu.setOnMenuItemClickListener {
-            when (it.itemId) {
+        popupMenu.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
                 R.id.newest -> {
-                    viewModel.getNotes(SortType.Descending)
+                    viewModel.notesByDescending.observe(viewLifecycleOwner) { notesByDesc ->
+                        notesByDesc?.let {
+                            adapter.submitList(it)
+                        }
+                    }
                     true
                 }
                 R.id.oldest -> {
-                    viewModel.getNotes(SortType.Ascending)
+                    viewModel.notesByAscending.observe(viewLifecycleOwner) { notesByAsc ->
+                        notesByAsc?.let {
+                            adapter.submitList(it)
+                        }
+                    }
                     true
                 }
                 else -> true

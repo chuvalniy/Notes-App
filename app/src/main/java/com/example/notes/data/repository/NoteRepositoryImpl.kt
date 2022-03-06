@@ -4,9 +4,6 @@ package com.example.notes.data.repository
 import com.example.notes.data.local.NoteDao
 import com.example.notes.domain.model.Note
 import com.example.notes.domain.repository.NoteRepository
-import com.example.notes.domain.util.SortType
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 
 class NoteRepositoryImpl(
     private val dao: NoteDao
@@ -47,17 +44,9 @@ class NoteRepositoryImpl(
 
     override fun searchDatabase(searchQuery: String) = dao.searchDatabase(searchQuery)
 
-    override fun getAllNotes(sortType: SortType): Flow<List<Note>> {
-        return dao.getAllNotes().map { notes ->
-            when (sortType) {
-                is SortType.Ascending -> {
-                    notes.sortedBy { it.timestamp }
-                }
-                is SortType.Descending -> {
-                    notes.sortedByDescending { it.timestamp }
-                }
-            }
-        }
-    }
+    override fun getAllNotesByAsc() = dao.getAllNotesByAsc()
 
+    override fun getAllNotesByDesc() = dao.getAllNotesByDesc()
+
+    override fun getAllNotes() = dao.getAllNotes()
 }

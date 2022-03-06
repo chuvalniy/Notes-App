@@ -48,21 +48,18 @@ class NoteAddFragment : BaseFragment<FragmentNoteAddBinding>() {
             edTitle.setText(note.title)
             edContent.setText(note.content)
             btnAddNote.setOnClickListener {
-                updateNote()
+                updateNote(note)
             }
         }
     }
 
-    private fun updateNote() {
+    private fun updateNote(note: Note) {
         viewModel.updateNote(
             Note(
                 id = navigationArgs.id,
                 title = binding.edTitle.text.toString(),
                 content = binding.edContent.text.toString(),
-                color = ContextCompat.getColor(
-                    requireActivity(),
-                    Note.colors.random()
-                )
+                color = note.color,
             )
         )
         findNavController().navigate(R.id.action_add_edit_to_list)

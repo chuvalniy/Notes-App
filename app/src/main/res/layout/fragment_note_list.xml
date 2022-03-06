@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/semi_black"
-    android:padding="@dimen/screen_padding"
     tools:context=".presentation.note_list.NoteListFragment">
 
     <androidx.core.widget.NestedScrollView
@@ -23,6 +22,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginBottom="@dimen/bottom_margin"
+                android:layout_margin="@dimen/screen_margin"
                 android:orientation="horizontal">
 
                 <SearchView
@@ -73,6 +73,7 @@
         android:layout_gravity="bottom|center"
         android:clickable="true"
         android:focusable="true"
+        android:layout_marginBottom="@dimen/bottom_margin"
         android:text="@string/new_note"
         app:icon="@drawable/ic_add"
         app:iconTint="@color/white" />
