@@ -7,12 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.SearchView
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.notes.BaseFragment
 import com.example.notes.R
 import com.example.notes.databinding.FragmentNoteListBinding
-import com.example.notes.domain.util.SortType
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -33,9 +33,9 @@ class NoteListFragment : BaseFragment<FragmentNoteListBinding>() {
             }
         )
 
-        viewModel.notesState.observe(viewLifecycleOwner) { notes ->
-            notes.let {
-                adapter.submitList(it.notes)
+        viewModel.notes.observe(viewLifecycleOwner) { notes ->
+            notes?.let {
+                adapter.submitList(it)
             }
         }
 
@@ -67,14 +67,22 @@ class NoteListFragment : BaseFragment<FragmentNoteListBinding>() {
     private fun popupMenu() {
         val popupMenu = PopupMenu(activity, binding.icSort)
         popupMenu.inflate(R.menu.popup_menu)
-        popupMenu.setOnMenuItemClickListener {
-            when (it.itemId) {
+        popupMenu.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
                 R.id.newest -> {
-                    viewModel.getNotes(SortType.Descending)
+                    viewModel.notesByDescending.observe(viewLifecycleOwner) { notesByDesc ->
+                        notesByDesc?.let {
+                            adapter.submitList(it)
+                        }
+                    }
                     true
                 }
                 R.id.oldest -> {
-                    viewModel.getNotes(SortType.Ascending)
+                    viewModel.notesByAscending.observe(viewLifecycleOwner) { notesByAsc ->
+                        notesByAsc?.let {
+                            adapter.submitList(it)
+                        }
+                    }
                     true
                 }
                 else -> true
@@ -101,7 +109,7 @@ class NoteListFragment : BaseFragment<FragmentNoteListBinding>() {
         val searchQuery = "%$query%"
 
         viewModel.searchDatabase(searchQuery).observe(this.viewLifecycleOwner) { notes ->
-            notes.let {
+            notes?.let {
                 adapter.submitList(it)
             }
         }

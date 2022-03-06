@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="screen_padding">16dp</dimen>
+    <dimen name="screen_margin">16dp</dimen>
     <dimen name="icon_padding">12dp</dimen>
     <dimen name="card_corner_radius">12dp</dimen>
     <dimen name="card_margin">12dp</dimen>
@@ -14,4 +14,5 @@
     <dimen name="auti_size_max_text_size">40sp</dimen>
     <dimen name="auto_size_min_text_size">12sp</dimen>
     <dimen name="auto_size_step_granularity">2sp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>

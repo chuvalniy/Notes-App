@@ -1,6 +1,9 @@
 package com.example.notes.presentation.note_detail
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.notes.domain.model.Note
 import com.example.notes.domain.repository.NoteRepository
 import dagger.hilt.android.lifecycle.HiltViewModel

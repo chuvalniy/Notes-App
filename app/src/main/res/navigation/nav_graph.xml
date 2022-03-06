@@ -28,11 +28,11 @@
         <action
             android:id="@+id/action_noteListFragment_to_noteAddFragment"
             app:destination="@id/add_edit"
-            app:popUpTo="@id/list" />
+            app:popUpToInclusive="false" />
         <action
             android:id="@+id/action_list_to_detail"
             app:destination="@id/detail"
-            app:popUpTo="@id/list" />
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/detail"
@@ -41,8 +41,7 @@
         tools:layout="@layout/fragment_note_detail" >
         <action
             android:id="@+id/action_detail_to_add_edit"
-            app:destination="@id/add_edit"
-            app:popUpTo="@id/list" />
+            app:destination="@id/add_edit" />
         <argument
             android:name="id"
             app:argType="integer"

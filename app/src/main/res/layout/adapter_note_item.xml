@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/bottom_margin">
+    android:layout_height="wrap_content">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cvNoteItem"
+        android:layout_margin="@dimen/screen_margin"
         android:layout_width="match_parent"
         android:layout_height="@dimen/card_height"
         app:cardCornerRadius="@dimen/card_corner_radius">

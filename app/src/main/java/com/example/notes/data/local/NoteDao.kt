@@ -10,6 +10,12 @@ interface NoteDao {
     @Query("SELECT * FROM note_db")
     fun getAllNotes(): Flow<List<Note>>
 
+    @Query("SELECT * FROM note_db ORDER BY timestamp DESC")
+    fun getAllNotesByDesc(): Flow<List<Note>>
+
+    @Query("SELECT * FROM note_db ORDER BY timestamp ASC")
+    fun getAllNotesByAsc(): Flow<List<Note>>
+
     @Query("SELECT * FROM note_db WHERE id =:id")
     fun getOneNote(id: Int): Flow<Note>
 
