@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/semi_black"
+    android:orientation="vertical"
+    android:padding="@dimen/screen_margin"
+    tools:context=".presentation.note_add.NoteAddFragment">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/btnGoBack"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@drawable/searchview_background"
+            android:contentDescription="@string/go_back"
+            android:padding="@dimen/icon_padding"
+            android:src="@drawable/ic_baseline_arrow_back" />
+
+        <ImageView
+            android:id="@+id/btnAddNote"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:background="@drawable/searchview_background"
+            android:contentDescription="@string/add_note"
+            android:padding="@dimen/icon_padding"
+            android:src="@drawable/ic_baseline_done" />
+
+
+    </FrameLayout>
+
+    <EditText
+        android:id="@+id/edTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/text_view_top_margin"
+        android:background="@null"
+        android:hint="@string/title"
+        android:minHeight="@dimen/min_height"
+        style="@style/TitleTextStyling"/>
+
+    <EditText
+        android:id="@+id/edContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:layout_marginTop="@dimen/text_view_top_margin"
+        android:hint="@string/enter_description"
+        android:minHeight="@dimen/min_height"
+        style="@style/ContentTextStyling" />
+
+</LinearLayout>

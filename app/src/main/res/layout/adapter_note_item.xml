@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cvNoteItem"
+        android:layout_marginBottom="@dimen/screen_margin"
+        android:layout_marginStart="@dimen/screen_margin"
+        android:layout_marginEnd="@dimen/screen_margin"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/card_height"
+        app:cardCornerRadius="@dimen/card_corner_radius">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/card_margin"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvTitle"
+                style="@style/Headline"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="top"
+                android:layout_weight="1"
+                android:autoSizeMaxTextSize="@dimen/auti_size_max_text_size"
+                android:autoSizeMinTextSize="@dimen/auto_size_min_text_size"
+                android:autoSizeStepGranularity="@dimen/auto_size_step_granularity"
+                android:autoSizeTextType="uniform"
+                tools:text="Title" />
+
+            <TextView
+                android:id="@+id/tvDate"
+                style="@style/Secondary.b1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="bottom"
+                android:paddingStart="@dimen/date_start_padding"
+                tools:text="May 21, 2020" />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>

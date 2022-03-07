@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="screen_margin">16dp</dimen>
+    <dimen name="icon_padding">12dp</dimen>
+    <dimen name="card_corner_radius">12dp</dimen>
+    <dimen name="card_margin">12dp</dimen>
+    <dimen name="date_start_padding">8dp</dimen>
+    <dimen name="icon_end_margin">16dp</dimen>
+    <dimen name="bottom_margin">16dp</dimen>
+    <dimen name="card_height">175dp</dimen>
+    <dimen name="search_view_end_margin">12dp</dimen>
+    <dimen name="text_view_top_margin">20dp</dimen>
+    <dimen name="min_height">48dp</dimen>
+    <dimen name="auti_size_max_text_size">40sp</dimen>
+    <dimen name="auto_size_min_text_size">12sp</dimen>
+    <dimen name="auto_size_step_granularity">2sp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+</resources>
