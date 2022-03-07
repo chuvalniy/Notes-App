@@ -7,7 +7,9 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cvNoteItem"
-        android:layout_margin="@dimen/screen_margin"
+        android:layout_marginBottom="@dimen/screen_margin"
+        android:layout_marginStart="@dimen/screen_margin"
+        android:layout_marginEnd="@dimen/screen_margin"
         android:layout_width="match_parent"
         android:layout_height="@dimen/card_height"
         app:cardCornerRadius="@dimen/card_corner_radius">

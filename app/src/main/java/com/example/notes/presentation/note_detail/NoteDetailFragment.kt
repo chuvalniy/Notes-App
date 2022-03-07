@@ -11,6 +11,7 @@ import com.example.notes.BaseFragment
 import com.example.notes.R
 import com.example.notes.databinding.FragmentNoteDetailBinding
 import com.example.notes.domain.model.Note
+import com.example.notes.utils.getDateString
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
