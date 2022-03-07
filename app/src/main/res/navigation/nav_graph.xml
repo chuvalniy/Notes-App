@@ -13,6 +13,8 @@
         <action
             android:id="@+id/action_add_edit_to_list"
             app:destination="@id/list"
+            app:enterAnim="@anim/enter_anim_left"
+            app:exitAnim="@anim/exit_anim_left"
             app:popUpTo="@id/list"
             app:popUpToInclusive="true" />
         <argument
@@ -28,10 +30,18 @@
         <action
             android:id="@+id/action_noteListFragment_to_noteAddFragment"
             app:destination="@id/add_edit"
+            app:enterAnim="@anim/enter_anim_right"
+            app:exitAnim="@anim/exit_anim_right"
+            app:popEnterAnim="@anim/pop_enter_anim_right"
+            app:popExitAnim="@anim/pop_exit_anim_right"
             app:popUpToInclusive="false" />
         <action
             android:id="@+id/action_list_to_detail"
             app:destination="@id/detail"
+            app:enterAnim="@anim/enter_anim_right"
+            app:exitAnim="@anim/exit_anim_right"
+            app:popEnterAnim="@anim/pop_enter_anim_right"
+            app:popExitAnim="@anim/pop_exit_anim_right"
             app:popUpToInclusive="false" />
     </fragment>
     <fragment
@@ -41,7 +51,11 @@
         tools:layout="@layout/fragment_note_detail" >
         <action
             android:id="@+id/action_detail_to_add_edit"
-            app:destination="@id/add_edit" />
+            app:destination="@id/add_edit"
+            app:enterAnim="@anim/enter_anim_right"
+            app:exitAnim="@anim/exit_anim_right"
+            app:popEnterAnim="@anim/pop_enter_anim_right"
+            app:popExitAnim="@anim/pop_exit_anim_right" />
         <argument
             android:name="id"
             app:argType="integer"
@@ -49,6 +63,8 @@
         <action
             android:id="@+id/action_detail_to_list"
             app:destination="@id/list"
+            app:enterAnim="@anim/enter_anim_left"
+            app:exitAnim="@anim/exit_anim_left"
             app:popUpTo="@id/list"
             app:popUpToInclusive="true" />
     </fragment>
