@@ -16,5 +16,10 @@
     <string name="sort_by">Sort by</string>
     <string name="queryHint">Enter note title…</string>
     <string name="title_activity_splash_screen">SplashScreenActivity</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="sort_bottom_fragment">Sort</string>
+    <string name="sort_by_ascending">By ascending</string>
+    <string name="sort_by_descending">By descending</string>
 
 </resources>

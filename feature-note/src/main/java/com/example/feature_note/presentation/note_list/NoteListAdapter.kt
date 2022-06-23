@@ -21,15 +21,9 @@ class NoteListAdapter(
         fun bind(note: Note) {
             binding.apply {
                 tvDate.text = getDateString(note.timestamp)
-                cvNoteItem.setOnClickListener {
-                    onMoveToDetail(note)
-                }
+                cvNoteItem.setOnClickListener { onMoveToDetail(note) }
                 cvNoteItem.setCardBackgroundColor(note.color!!)
-                if (note.title == "New note") {
-                    tvTitle.text = "${note.title} #${note.id}"
-                } else {
-                    tvTitle.text = note.title
-                }
+                tvTitle.text = note.title
             }
         }
     }

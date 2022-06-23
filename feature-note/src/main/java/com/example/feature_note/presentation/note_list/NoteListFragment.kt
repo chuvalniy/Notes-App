@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -19,7 +20,7 @@ import kotlinx.coroutines.flow.collect
 class NoteListFragment : BaseFragment<FragmentNoteListBinding>() {
 
     private var adapter: NoteListAdapter? = null
-    private val viewModel: NoteListViewModel by viewModels()
+    private val viewModel: NoteListViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -29,6 +30,18 @@ class NoteListFragment : BaseFragment<FragmentNoteListBinding>() {
         handleSearch()
 
         navigateToNoteAddFragment()
+        navigateToSortDialogFragment(savedInstanceState)
+    }
+
+    private fun navigateToSortDialogFragment(savedInstanceState: Bundle?) {
+        binding.icSort.setOnClickListener {
+            if (savedInstanceState == null) {
+                NoteListBottomSheetFragment().show(
+                    parentFragmentManager,
+                    NoteListBottomSheetFragment.SORT_BOTTOM_SHEET_FRAGMENT_TAG
+                )
+            }
+        }
     }
 
     private fun navigateToNoteAddFragment() {

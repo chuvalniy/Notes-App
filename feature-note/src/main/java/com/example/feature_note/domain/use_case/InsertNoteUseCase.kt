@@ -11,7 +11,7 @@ class InsertNoteUseCase(
         if (note.title.isEmpty()) {
             repository.insertNote(
                 Note(
-                    title = "New note",
+                    title = "New note ${note.id}",
                     content = note.content,
                     color = note.color
                 )
