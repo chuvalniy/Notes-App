@@ -6,23 +6,26 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.feature_note.domain.model.Note
 import com.example.feature_note.domain.repository.NoteRepository
+import com.example.feature_note.domain.use_case.DeleteNoteUseCase
+import com.example.feature_note.domain.use_case.GetNoteUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class NoteDetailViewModel @Inject constructor(
-    private val repository: NoteRepository
+    private val deleteNoteUseCase: DeleteNoteUseCase,
+    private val getOneNoteUseCase: GetNoteUseCase
 ) : ViewModel() {
 
 
     fun deleteNote(note: Note) {
         viewModelScope.launch {
-            repository.deleteNote(note)
+            deleteNoteUseCase(note)
         }
     }
 
     fun getOneNote(id: Int): LiveData<Note> {
-        return repository.getOneNote(id).asLiveData()
+        return getOneNoteUseCase(id).asLiveData()
     }
 }

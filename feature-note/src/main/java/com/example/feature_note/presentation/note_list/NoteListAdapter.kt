@@ -16,8 +16,7 @@ class NoteListAdapter(
     class NoteViewHolder(
         private val binding: AdapterNoteItemBinding,
         private var onMoveToDetail: (Note) -> Unit,
-    ) :
-        RecyclerView.ViewHolder(binding.root) {
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(note: Note) {
             binding.apply {
