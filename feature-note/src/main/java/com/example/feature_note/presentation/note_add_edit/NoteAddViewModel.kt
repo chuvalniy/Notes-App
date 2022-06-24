@@ -6,7 +6,10 @@ import androidx.lifecycle.viewModelScope
 import com.example.feature_note.domain.model.Note
 import com.example.feature_note.domain.use_case.InsertNoteUseCase
 import com.example.feature_note.domain.use_case.UpdateNoteUseCase
+import com.example.feature_note.domain.use_case.ValidateTitleUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -31,33 +34,60 @@ class NoteAddViewModel @Inject constructor(
             state.set("content", value)
         }
 
-    var noteColor = state.get<String>("color") ?: note?.color ?: Note.colors.random()
+    private var noteColor = state.get<String>("color") ?: note?.color ?: Note.colors.random()
         set(value) {
             field = value
             state.set("color", value)
         }
 
-    fun onEvent(noteAddEvent: NoteAddEvent) {
-        viewModelScope.launch {
-            when (noteAddEvent) {
-                is NoteAddEvent.SaveNote -> {
-                    // create use case for validation
-                    if (note != null) {
-                        val updatedNote = note.copy(
-                            title = noteTitle,
-                            content = noteContent,
-                        )
-                        updateNoteUseCase(updatedNote)
-                    } else {
-                        val newNote = Note(
-                            title = noteTitle,
-                            content = noteContent,
-                            color = noteColor
-                        )
-                        insertNoteUseCase(newNote)
-                    }
+    private val _noteAddEditChannel = Channel<UiEvent>()
+    val noteAddEditEvent = _noteAddEditChannel.receiveAsFlow()
+
+    fun onEvent(event: NoteAddEditEvent) {
+        when (event) {
+            is NoteAddEditEvent.TitleChanged -> {
+                noteTitle = event.title
+            }
+            is NoteAddEditEvent.ContentChanged -> {
+                noteContent = event.content
+            }
+            is NoteAddEditEvent.NoteSubmitted -> {
+                if (noteTitle.isEmpty()) {
+                    showInvalidInputMessage("The title can't be blank")
+                    return
+                }
+
+                if (note != null) {
+                    val updatedNote = note.copy(
+                        title = noteTitle,
+                        content = noteContent,
+                    )
+                    updateNote(updatedNote)
+                } else {
+                    val newNote = Note(
+                        title = noteTitle,
+                        content = noteContent,
+                        color = noteColor
+                    )
+                    insertNote(newNote)
                 }
             }
         }
+    }
+
+    private fun updateNote(note: Note) = viewModelScope.launch {
+        updateNoteUseCase(note)
+    }
+
+    private fun insertNote(note: Note) = viewModelScope.launch {
+        insertNoteUseCase(note)
+    }
+
+    private fun showInvalidInputMessage(text: String) = viewModelScope.launch {
+        _noteAddEditChannel.send(UiEvent.ShowSnackbar(text))
+    }
+
+    sealed class UiEvent {
+        data class ShowSnackbar(val message: String) : UiEvent()
     }
 }
