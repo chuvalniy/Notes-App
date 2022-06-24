@@ -31,6 +31,12 @@ class NoteAddViewModel @Inject constructor(
             state.set("content", value)
         }
 
+    var noteColor = state.get<String>("color") ?: note?.color ?: Note.colors.random()
+        set(value) {
+            field = value
+            state.set("color", value)
+        }
+
     fun onEvent(noteAddEvent: NoteAddEvent) {
         viewModelScope.launch {
             when (noteAddEvent) {
@@ -46,7 +52,7 @@ class NoteAddViewModel @Inject constructor(
                         val newNote = Note(
                             title = noteTitle,
                             content = noteContent,
-                            color = Note.colors.random()
+                            color = noteColor
                         )
                         insertNoteUseCase(newNote)
                     }

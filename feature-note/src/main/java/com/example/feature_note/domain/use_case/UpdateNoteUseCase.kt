@@ -11,12 +11,7 @@ class UpdateNoteUseCase(
 
         if (note.title.isEmpty()) {
             repository.updateNote(
-                Note(
-                    id = note.id,
-                    title = "New note",
-                    content = note.content,
-                    color = note.color
-                )
+                note.copy(title = "New note",)
             )
         } else {
             repository.updateNote(note)

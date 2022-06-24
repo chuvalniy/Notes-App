@@ -10,11 +10,7 @@ class InsertNoteUseCase(
     suspend operator fun invoke(note: Note) {
         if (note.title.isEmpty()) {
             repository.insertNote(
-                Note(
-                    title = "New note ${note.id}",
-                    content = note.content,
-                    color = note.color
-                )
+                note.copy(title = "New note ${note.id}")
             )
         } else {
             repository.insertNote(note)

@@ -1,5 +1,6 @@
 package com.example.feature_note.presentation.note_list
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -21,7 +22,7 @@ class NoteListAdapter(
             binding.apply {
                 tvDate.text = note.createdDateFormatted
                 cvNoteItem.setOnClickListener { onMoveToDetail(note) }
-                cvNoteItem.setCardBackgroundColor(note.color!!)
+                cvNoteItem.setCardBackgroundColor(Color.parseColor(note.color))
                 tvTitle.text = note.title
             }
         }

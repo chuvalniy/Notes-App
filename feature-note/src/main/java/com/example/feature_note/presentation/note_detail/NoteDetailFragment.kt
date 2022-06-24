@@ -6,11 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.example.common.ui.BaseFragment
 import com.example.feature_note.R
 import com.example.feature_note.databinding.FragmentNoteDetailBinding
-import com.example.feature_note.domain.model.Note
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -24,18 +22,21 @@ class NoteDetailFragment : BaseFragment<FragmentNoteDetailBinding>() {
 
         setupNoteInfoWithUi()
 
-        // to add edit
-        binding.btnEdit.setOnClickListener {
+        applyBindings()
+    }
+
+    private fun applyBindings() = binding.apply {
+        btnEdit.setOnClickListener {
             val action = NoteDetailFragmentDirections.actionDetailToAddEdit(viewModel.note)
             findNavController().navigate(action)
         }
-        // delete
-        binding.btnDelete.setOnClickListener {
+
+        btnDelete.setOnClickListener {
             viewModel.onEvent(NoteDetailEvent.DeleteNote)
             findNavController().navigate(R.id.action_detail_to_list)
         }
-        // go back
-        binding.btnGoBack.setOnClickListener {
+
+        btnGoBack.setOnClickListener {
             findNavController().navigateUp()
         }
     }

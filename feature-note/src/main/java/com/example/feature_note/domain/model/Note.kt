@@ -3,7 +3,6 @@ package com.example.feature_note.domain.model
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.feature_note.R
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import java.text.DateFormat
@@ -15,7 +14,7 @@ data class Note(
     @PrimaryKey val id: Int? = null,
     val title: String,
     val content: String,
-    val color: Int? = null,
+    val color: String,
     val timestamp: Long = System.currentTimeMillis()
 ) : Parcelable {
     @IgnoredOnParcel
@@ -25,11 +24,11 @@ data class Note(
 
     companion object {
         val colors = listOf(
-            R.color.light_red,
-            R.color.light_blue,
-            R.color.light_green,
-            R.color.light_purple,
-            R.color.light_orange
+            "#FFFFAB91",
+            "#FF81DEEA",
+            "#FFE7ED9B",
+            "#FFCF94DA",
+            "#FF81DEEA"
         )
     }
 }
