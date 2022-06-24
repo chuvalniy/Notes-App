@@ -38,11 +38,10 @@ class NoteAddFragment : BaseFragment<FragmentNoteAddBinding>() {
             }
 
             btnGoBack.setOnClickListener {
-                findNavController().navigateUp()
+                findNavController().popBackStack()
             }
             btnSaveNote.setOnClickListener {
                 viewModel.onEvent(NoteAddEditEvent.NoteSubmitted)
-                findNavController().navigate(R.id.action_add_edit_to_list)
             }
         }
 
@@ -53,7 +52,10 @@ class NoteAddFragment : BaseFragment<FragmentNoteAddBinding>() {
             viewModel.noteAddEditEvent.collect { event ->
                 when (event) {
                     is NoteAddViewModel.UiEvent.ShowSnackbar -> {
-                        Snackbar.make(requireView(), event.message, Snackbar.LENGTH_LONG).show()
+                        Snackbar.make(requireView(), event.message, Snackbar.LENGTH_SHORT).show()
+                    }
+                    is NoteAddViewModel.UiEvent.NavigateToListScreen -> {
+                        findNavController().popBackStack()
                     }
                 }
             }

@@ -77,10 +77,12 @@ class NoteAddViewModel @Inject constructor(
 
     private fun updateNote(note: Note) = viewModelScope.launch {
         updateNoteUseCase(note)
+        _noteAddEditChannel.send(UiEvent.NavigateToListScreen)
     }
 
     private fun insertNote(note: Note) = viewModelScope.launch {
         insertNoteUseCase(note)
+        _noteAddEditChannel.send(UiEvent.NavigateToListScreen)
     }
 
     private fun showInvalidInputMessage(text: String) = viewModelScope.launch {
@@ -89,5 +91,6 @@ class NoteAddViewModel @Inject constructor(
 
     sealed class UiEvent {
         data class ShowSnackbar(val message: String) : UiEvent()
+        object NavigateToListScreen : UiEvent()
     }
 }
