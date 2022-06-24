@@ -22,6 +22,7 @@
 
 - MVVM
 - Room
+- DataStore
 - Dagger Hilt
 - Navigation Component
 - ViewModel
@@ -32,7 +33,8 @@
 
 ## Todo
 
-- Note swipe to delete
-- Select note color
-- Drag & Drop note 
-- Delete submit
+- Login / Register (edu purposes)
+- Push Notifications (edu purposes)
+- Color picker
+- Multiple language support?
+- Dark / White themes?
