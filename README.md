@@ -8,6 +8,7 @@
 - CRUD (Add, Edit, Delete, Update)
 - Ascending / Descending Sort
 - Search Note (by Title)
+- Swipe Gestures (deleting)
 
 ## App Preview
 
