@@ -16,42 +16,41 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class NoteDetailFragment : BaseFragment<FragmentNoteDetailBinding>() {
 
-    private val navigationArgs: NoteDetailFragmentArgs by navArgs()
-
     private val viewModel: NoteDetailViewModel by viewModels()
 
-    private lateinit var note: Note
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.apply {
+            tvTitle.text = viewModel.noteTitle
+            tvContent.text = viewModel.noteContent
+        }
+//        viewModel.getOneNote(id).observe(this.viewLifecycleOwner) { selectedNote ->
+//            note = selectedNote
+//            binding.apply {
+//                tvTitle.text = note.title
+//                tvContent.text = note.content
+//                btnDelete.setOnClickListener {
+//                    viewModel.deleteNote(note)
+//                    findNavController().navigate(R.id.action_detail_to_list)
+//                }
+//            }
+//        }
+//
+//        binding.btnEdit.setOnClickListener {
+//            val action = NoteDetailFragmentDirections
+//                .actionDetailToAddEdit(note.id!!)
+//            findNavController().navigate(action)
+//        }
+        binding.btnGoBack.setOnClickListener {
+            findNavController().navigate(R.id.action_detail_to_list)
+        }
+    }
 
     override fun initBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
     ) = FragmentNoteDetailBinding.inflate(inflater, container, false)
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val id = navigationArgs.id
-
-        viewModel.getOneNote(id).observe(this.viewLifecycleOwner) { selectedNote ->
-            note = selectedNote
-            binding.apply {
-                tvTitle.text = note.title
-                tvContent.text = note.content
-                btnDelete.setOnClickListener {
-                    viewModel.deleteNote(note)
-                    findNavController().navigate(R.id.action_detail_to_list)
-                }
-            }
-        }
-
-        binding.btnEdit.setOnClickListener {
-            val action = NoteDetailFragmentDirections
-                .actionDetailToAddEdit(note.id!!)
-            findNavController().navigate(action)
-        }
-        binding.btnGoBack.setOnClickListener {
-            findNavController().navigate(R.id.action_detail_to_list)
-        }
-    }
 
 }

@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.feature_note.databinding.AdapterNoteItemBinding
 import com.example.feature_note.domain.model.Note
-import com.example.getDateString
 
 class NoteListAdapter(
     private var onMoveToDetail: (Note) -> Unit,
@@ -20,7 +19,7 @@ class NoteListAdapter(
 
         fun bind(note: Note) {
             binding.apply {
-                tvDate.text = getDateString(note.timestamp)
+                tvDate.text = note.createdDateFormatted
                 cvNoteItem.setOnClickListener { onMoveToDetail(note) }
                 cvNoteItem.setCardBackgroundColor(note.color!!)
                 tvTitle.text = note.title

@@ -1,6 +1,5 @@
 package com.example.feature_note.presentation.note_list
 
-
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,10 +7,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.example.common.ui.BaseFragment
 import com.example.common.ui.onQueryTextChanged
 import com.example.feature_note.R
 import com.example.feature_note.databinding.FragmentNoteListBinding
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 
@@ -67,12 +69,46 @@ class NoteListFragment : BaseFragment<FragmentNoteListBinding>() {
         adapter = NoteListAdapter(
             onMoveToDetail = { note ->
                 val action = NoteListFragmentDirections
-                    .actionListToDetail(note.id ?: 0)
+                    .actionListToDetail(note)
                 findNavController().navigate(action)
             }
         )
 
         binding.rvNoteList.adapter = adapter
+
+        setupItemTouchHelper()
+    }
+
+    private fun setupItemTouchHelper() {
+        ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
+            0,
+            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+        ) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val note = adapter?.currentList?.get(viewHolder.adapterPosition)
+                note?.let {
+                    viewModel.onEvent(NoteListEvent.SwipeNote(note))
+
+                    showUndoSnackbar()
+                }
+            }
+        }).attachToRecyclerView(binding.rvNoteList)
+    }
+
+    private fun showUndoSnackbar() {
+        Snackbar.make(requireView(), "Note deleted", Snackbar.LENGTH_LONG)
+            .setAction("UNDO") {
+                viewModel.onEvent(NoteListEvent.RestoreDeletedNote)
+            }
+            .show()
     }
 
     override fun initBinding(

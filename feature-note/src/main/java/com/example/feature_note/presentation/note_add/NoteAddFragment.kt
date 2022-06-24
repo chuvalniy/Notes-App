@@ -33,14 +33,14 @@ class NoteAddFragment : BaseFragment<FragmentNoteAddBinding>() {
     }
 
     private fun handleNavigationArgs() {
-        val id = navigationArgs.id
-        if (id > 0) {
-            observeUi(id)
-        } else {
-            binding.btnAddNote.setOnClickListener {
-                insertNote()
-            }
-        }
+//        val id = navigationArgs.id
+//        if (id > 0) {
+//            observeUi(id)
+//        } else {
+//            binding.btnAddNote.setOnClickListener {
+//                insertNote()
+//            }
+//        }
     }
 
     private fun observeUi(id: Int) {
@@ -53,24 +53,24 @@ class NoteAddFragment : BaseFragment<FragmentNoteAddBinding>() {
         edTitle.setText(note.title)
         edContent.setText(note.content)
         btnAddNote.setOnClickListener {
-            updateNote(note)
+//            updateNote(note)
         }
     }
 
-    private fun updateNote(note: Note) {
-        viewModel.onEvent(
-            NoteAddEvent.UpdateNote(
-                Note(
-                    id = navigationArgs.id,
-                    title = binding.edTitle.text.toString(),
-                    content = binding.edContent.text.toString(),
-                    color = note.color,
-                )
-            )
-        )
-
-        navigateToNoteList()
-    }
+//    private fun updateNote(note: Note) {
+//        viewModel.onEvent(
+//            NoteAddEvent.UpdateNote(
+//                Note(
+//                    id = navigationArgs.id,
+//                    title = binding.edTitle.text.toString(),
+//                    content = binding.edContent.text.toString(),
+//                    color = note.color,
+//                )
+//            )
+//        )
+//
+//        navigateToNoteList()
+//    }
 
     private fun insertNote() {
         viewModel.onEvent(

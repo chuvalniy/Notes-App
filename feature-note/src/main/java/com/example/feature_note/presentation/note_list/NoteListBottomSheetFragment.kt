@@ -38,12 +38,8 @@ class NoteListBottomSheetFragment : BottomSheetDialogFragment() {
     private fun observeUi() {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             when (viewModel.preferencesFlow.first().sortType) {
-                SortType.ASCENDING -> {
-                    binding.rbSortAscending.isChecked = true
-                }
-                SortType.DESCENDING -> {
-                    binding.rbSortDescending.isChecked = true
-                }
+                SortType.ASCENDING -> binding.rbSortAscending.isChecked = true
+                SortType.DESCENDING -> binding.rbSortDescending.isChecked = true
             }
         }
     }
