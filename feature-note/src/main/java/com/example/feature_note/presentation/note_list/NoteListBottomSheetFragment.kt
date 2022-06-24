@@ -1,15 +1,15 @@
 package com.example.feature_note.presentation.note_list
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import com.example.feature_note.R
+import androidx.lifecycle.lifecycleScope
+import com.example.feature_note.data.local.settings.SortType
 import com.example.feature_note.databinding.FragmentNoteListBottomSheetBinding
-import com.example.feature_note.utils.SortType
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import kotlinx.coroutines.flow.first
 
 class NoteListBottomSheetFragment : BottomSheetDialogFragment() {
 
@@ -30,8 +30,22 @@ class NoteListBottomSheetFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         handleSortEvent()
+
+        observeUi()
+    }
+
+    private fun observeUi() {
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            when (viewModel.preferencesFlow.first().sortType) {
+                SortType.ASCENDING -> {
+                    binding.rbSortAscending.isChecked = true
+                }
+                SortType.DESCENDING -> {
+                    binding.rbSortDescending.isChecked = true
+                }
+            }
+        }
     }
 
     private fun handleSortEvent() {

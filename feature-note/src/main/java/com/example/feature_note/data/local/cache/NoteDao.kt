@@ -1,8 +1,8 @@
-package com.example.feature_note.data.local
+package com.example.feature_note.data.local.cache
 
 import androidx.room.*
+import com.example.feature_note.data.local.settings.SortType
 import com.example.feature_note.domain.model.Note
-import com.example.feature_note.utils.SortType
 import kotlinx.coroutines.flow.Flow
 
 @Dao

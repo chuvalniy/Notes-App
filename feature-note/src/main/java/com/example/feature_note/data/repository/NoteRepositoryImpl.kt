@@ -1,10 +1,10 @@
 package com.example.feature_note.data.repository
 
 
-import com.example.feature_note.data.local.NoteDao
+import com.example.feature_note.data.local.cache.NoteDao
+import com.example.feature_note.data.local.settings.SortType
 import com.example.feature_note.domain.model.Note
 import com.example.feature_note.domain.repository.NoteRepository
-import com.example.feature_note.utils.SortType
 
 class NoteRepositoryImpl(
     private val dao: NoteDao
