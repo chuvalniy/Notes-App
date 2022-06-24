@@ -24,9 +24,6 @@ interface NoteDao {
     @Query("SELECT * FROM note_db WHERE title LIKE '%' || :searchQuery || '%' ORDER BY timestamp DESC")
     fun getAllNotesByDescending(searchQuery: String): Flow<List<Note>>
 
-    @Query("SELECT * FROM note_db WHERE id =:id")
-    fun getOneNote(id: Int): Flow<Note>
-
     @Delete
     suspend fun deleteNote(note: Note)
 

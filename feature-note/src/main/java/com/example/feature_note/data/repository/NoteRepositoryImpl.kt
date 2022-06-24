@@ -21,6 +21,4 @@ class NoteRepositoryImpl(
 
     override suspend fun deleteNote(note: Note) = dao.deleteNote(note)
 
-    override fun getOneNote(id: Int) = dao.getOneNote(id)
-
 }

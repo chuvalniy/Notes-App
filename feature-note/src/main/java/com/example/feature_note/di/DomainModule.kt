@@ -22,11 +22,6 @@ object DomainModule {
     }
 
     @Provides
-    fun provideGetNoteUseCase(repository: NoteRepository): GetNoteUseCase {
-        return GetNoteUseCase(repository = repository)
-    }
-
-    @Provides
     fun provideInsertNoteUseCase(repository: NoteRepository): InsertNoteUseCase {
         return InsertNoteUseCase(repository = repository)
     }

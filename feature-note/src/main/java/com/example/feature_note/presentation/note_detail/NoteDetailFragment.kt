@@ -22,29 +22,28 @@ class NoteDetailFragment : BaseFragment<FragmentNoteDetailBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupNoteInfoWithUi()
+
+        // to add edit
+        binding.btnEdit.setOnClickListener {
+            val action = NoteDetailFragmentDirections.actionDetailToAddEdit(viewModel.note)
+            findNavController().navigate(action)
+        }
+        // delete
+        binding.btnDelete.setOnClickListener {
+            viewModel.onEvent(NoteDetailEvent.DeleteNote)
+            findNavController().navigate(R.id.action_detail_to_list)
+        }
+        // go back
+        binding.btnGoBack.setOnClickListener {
+            findNavController().navigateUp()
+        }
+    }
+
+    private fun setupNoteInfoWithUi() {
         binding.apply {
             tvTitle.text = viewModel.noteTitle
             tvContent.text = viewModel.noteContent
-        }
-//        viewModel.getOneNote(id).observe(this.viewLifecycleOwner) { selectedNote ->
-//            note = selectedNote
-//            binding.apply {
-//                tvTitle.text = note.title
-//                tvContent.text = note.content
-//                btnDelete.setOnClickListener {
-//                    viewModel.deleteNote(note)
-//                    findNavController().navigate(R.id.action_detail_to_list)
-//                }
-//            }
-//        }
-//
-//        binding.btnEdit.setOnClickListener {
-//            val action = NoteDetailFragmentDirections
-//                .actionDetailToAddEdit(note.id!!)
-//            findNavController().navigate(action)
-//        }
-        binding.btnGoBack.setOnClickListener {
-            findNavController().navigate(R.id.action_detail_to_list)
         }
     }
 
