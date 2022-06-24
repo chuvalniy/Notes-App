@@ -13,9 +13,9 @@ import com.example.common.ui.BaseFragment
 import com.example.common.ui.onQueryTextChanged
 import com.example.feature_note.R
 import com.example.feature_note.databinding.FragmentNoteListBinding
+import com.example.feature_note.domain.model.Note
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
 class NoteListFragment : BaseFragment<FragmentNoteListBinding>() {
@@ -27,33 +27,56 @@ class NoteListFragment : BaseFragment<FragmentNoteListBinding>() {
         super.onViewCreated(view, savedInstanceState)
 
         setupAdapter()
-        observeData()
-        handleSearch()
 
-        navigateToNoteAddFragment()
-        navigateToSortDialogFragment(savedInstanceState)
+        observeData()
+        observeUiEvent()
+
+        handleSearch()
+        handleButtonClicks()
     }
 
-    private fun navigateToSortDialogFragment(savedInstanceState: Bundle?) {
-        binding.icSort.setOnClickListener {
-            if (savedInstanceState == null) {
-                NoteListBottomSheetFragment().show(
-                    parentFragmentManager,
-                    NoteListBottomSheetFragment.SORT_BOTTOM_SHEET_FRAGMENT_TAG
-                )
+    private fun observeUiEvent() {
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.noteListEventFlow.collect { event ->
+                when (event) {
+                    is NoteListViewModel.UiNoteListEvent.ShowUndoDeleteNoteMessage -> {
+                        showUndoDeleteNoteMessage(event.note)
+                    }
+                    is NoteListViewModel.UiNoteListEvent.NavigateToAddNoteScreen -> {
+                        findNavController().navigate(R.id.action_noteListFragment_to_noteAddFragment)
+                    }
+                    is NoteListViewModel.UiNoteListEvent.NavigateToDetailsNoteScreen -> {
+                        val action = NoteListFragmentDirections.actionListToDetail(event.note)
+                        findNavController().navigate(action)
+                    }
+                    is NoteListViewModel.UiNoteListEvent.NavigateToSortDialogScreen -> {
+                        findNavController().navigate(R.id.action_list_to_dialog_sort)
+                    }
+                }
             }
         }
     }
 
-    private fun navigateToNoteAddFragment() {
+    private fun handleButtonClicks() {
         binding.fabAddNote.setOnClickListener {
-            findNavController().navigate(R.id.action_noteListFragment_to_noteAddFragment)
+            viewModel.onEvent(NoteListEvent.AddNewNoteClicked)
         }
+        binding.icSort.setOnClickListener {
+            viewModel.onEvent(NoteListEvent.SortButtonClicked)
+        }
+    }
+
+    private fun showUndoDeleteNoteMessage(note: Note) {
+        Snackbar.make(requireView(), "Note deleted", Snackbar.LENGTH_LONG)
+            .setAction("UNDO") {
+                viewModel.onEvent(NoteListEvent.DeletedNoteRestored(note))
+            }
+            .show()
     }
 
     private fun handleSearch() {
         binding.searchNote.onQueryTextChanged { query ->
-            viewModel.onEvent(NoteListEvent.SearchNote(query))
+            viewModel.onEvent(NoteListEvent.QueryEntered(query))
         }
     }
 
@@ -68,12 +91,9 @@ class NoteListFragment : BaseFragment<FragmentNoteListBinding>() {
     private fun setupAdapter() {
         adapter = NoteListAdapter(
             onMoveToDetail = { note ->
-                val action = NoteListFragmentDirections
-                    .actionListToDetail(note)
-                findNavController().navigate(action)
+                viewModel.onEvent(NoteListEvent.NoteSelected(note))
             }
         )
-
         binding.rvNoteList.adapter = adapter
 
         setupItemTouchHelper()
@@ -94,22 +114,11 @@ class NoteListFragment : BaseFragment<FragmentNoteListBinding>() {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val note = adapter?.currentList?.get(viewHolder.adapterPosition)
-                note?.let {
-                    viewModel.onEvent(NoteListEvent.SwipeNote(note))
-
-                    showUndoSnackbar()
-                }
+                note?.let { viewModel.onEvent(NoteListEvent.NoteSwiped(note)) }
             }
         }).attachToRecyclerView(binding.rvNoteList)
     }
 
-    private fun showUndoSnackbar() {
-        Snackbar.make(requireView(), "Note deleted", Snackbar.LENGTH_LONG)
-            .setAction("UNDO") {
-                viewModel.onEvent(NoteListEvent.RestoreDeletedNote)
-            }
-            .show()
-    }
 
     override fun initBinding(
         inflater: LayoutInflater,

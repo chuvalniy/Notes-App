@@ -47,10 +47,10 @@ class NoteListBottomSheetFragment : BottomSheetDialogFragment() {
     private fun handleSortEvent() {
         binding.apply {
             rbSortAscending.setOnClickListener {
-                viewModel.onEvent(NoteListEvent.SortNote(SortType.ASCENDING))
+                viewModel.onEvent(NoteListEvent.SortOrderSelected(SortType.ASCENDING))
             }
             rbSortDescending.setOnClickListener {
-                viewModel.onEvent(NoteListEvent.SortNote(SortType.DESCENDING))
+                viewModel.onEvent(NoteListEvent.SortOrderSelected(SortType.DESCENDING))
             }
         }
     }
@@ -58,9 +58,5 @@ class NoteListBottomSheetFragment : BottomSheetDialogFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    companion object {
-        const val SORT_BOTTOM_SHEET_FRAGMENT_TAG = "SORT_BOTTOM_SHEET_FRAGMENT_TAG"
     }
 }

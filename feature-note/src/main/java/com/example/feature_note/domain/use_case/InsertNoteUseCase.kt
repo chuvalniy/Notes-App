@@ -7,13 +7,5 @@ class InsertNoteUseCase(
     private val repository: NoteRepository
 ) {
 
-    suspend operator fun invoke(note: Note) {
-        if (note.title.isEmpty()) {
-            repository.insertNote(
-                note.copy(title = "New note ${note.id}")
-            )
-        } else {
-            repository.insertNote(note)
-        }
-    }
+    suspend operator fun invoke(note: Note) = repository.insertNote(note)
 }

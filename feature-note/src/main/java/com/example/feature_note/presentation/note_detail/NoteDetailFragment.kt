@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.common.ui.BaseFragment
 import com.example.feature_note.R
@@ -22,22 +23,39 @@ class NoteDetailFragment : BaseFragment<FragmentNoteDetailBinding>() {
 
         setupNoteInfoWithUi()
 
-        applyBindings()
+        observeUiEvents()
+
+        handleButtonClicks()
     }
 
-    private fun applyBindings() = binding.apply {
+    private fun observeUiEvents() {
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.noteDetailsEvent.collect { event ->
+                when(event) {
+                    is NoteDetailViewModel.UiNoteDetailsEvent.NavigateToDetailsScreen -> {
+                        val action = NoteDetailFragmentDirections.actionDetailToAddEdit(event.note)
+                        findNavController().navigate(action)
+                    }
+                    is NoteDetailViewModel.UiNoteDetailsEvent.NavigateToListScreen -> {
+                        findNavController().navigate(R.id.action_detail_to_list)
+                    }
+                    is NoteDetailViewModel.UiNoteDetailsEvent.NavigateBack -> {
+                        findNavController().navigateUp()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun handleButtonClicks() = binding.apply {
         btnEdit.setOnClickListener {
-            val action = NoteDetailFragmentDirections.actionDetailToAddEdit(viewModel.note)
-            findNavController().navigate(action)
+            viewModel.onEvent(NoteDetailEvent.EditButtonClicked)
         }
-
         btnDelete.setOnClickListener {
-            viewModel.onEvent(NoteDetailEvent.DeleteNote)
-            findNavController().navigate(R.id.action_detail_to_list)
+            viewModel.onEvent(NoteDetailEvent.NoteDeleted)
         }
-
         btnGoBack.setOnClickListener {
-            findNavController().navigateUp()
+            viewModel.onEvent(NoteDetailEvent.BackButtonClicked)
         }
     }
 

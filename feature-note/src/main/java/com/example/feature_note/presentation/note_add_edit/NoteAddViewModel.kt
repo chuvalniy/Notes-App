@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.feature_note.domain.model.Note
 import com.example.feature_note.domain.use_case.InsertNoteUseCase
 import com.example.feature_note.domain.use_case.UpdateNoteUseCase
-import com.example.feature_note.domain.use_case.ValidateTitleUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -40,8 +39,8 @@ class NoteAddViewModel @Inject constructor(
             state.set("color", value)
         }
 
-    private val _noteAddEditChannel = Channel<UiEvent>()
-    val noteAddEditEvent = _noteAddEditChannel.receiveAsFlow()
+    private val _noteAddEditChannel = Channel<UiAddEditEvent>()
+    val noteAddEditEvent get() = _noteAddEditChannel.receiveAsFlow()
 
     fun onEvent(event: NoteAddEditEvent) {
         when (event) {
@@ -50,6 +49,9 @@ class NoteAddViewModel @Inject constructor(
             }
             is NoteAddEditEvent.ContentChanged -> {
                 noteContent = event.content
+            }
+            is NoteAddEditEvent.BackButtonClicked -> {
+                viewModelScope.launch { _noteAddEditChannel.send(UiAddEditEvent.NavigateBack) }
             }
             is NoteAddEditEvent.NoteSubmitted -> {
                 if (noteTitle.isEmpty()) {
@@ -77,20 +79,21 @@ class NoteAddViewModel @Inject constructor(
 
     private fun updateNote(note: Note) = viewModelScope.launch {
         updateNoteUseCase(note)
-        _noteAddEditChannel.send(UiEvent.NavigateToListScreen)
+        _noteAddEditChannel.send(UiAddEditEvent.NavigateToListScreen)
     }
 
     private fun insertNote(note: Note) = viewModelScope.launch {
         insertNoteUseCase(note)
-        _noteAddEditChannel.send(UiEvent.NavigateToListScreen)
+        _noteAddEditChannel.send(UiAddEditEvent.NavigateToListScreen)
     }
 
     private fun showInvalidInputMessage(text: String) = viewModelScope.launch {
-        _noteAddEditChannel.send(UiEvent.ShowSnackbar(text))
+        _noteAddEditChannel.send(UiAddEditEvent.ShowSnackbar(text))
     }
 
-    sealed class UiEvent {
-        data class ShowSnackbar(val message: String) : UiEvent()
-        object NavigateToListScreen : UiEvent()
+    sealed class UiAddEditEvent {
+        data class ShowSnackbar(val message: String) : UiAddEditEvent()
+        object NavigateToListScreen : UiAddEditEvent()
+        object NavigateBack : UiAddEditEvent()
     }
 }

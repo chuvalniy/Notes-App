@@ -13,7 +13,6 @@ import com.example.feature_note.R
 import com.example.feature_note.databinding.FragmentNoteAddBinding
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 
 
 @AndroidEntryPoint
@@ -36,25 +35,31 @@ class NoteAddFragment : BaseFragment<FragmentNoteAddBinding>() {
             edContent.addTextChangedListener {
                 viewModel.onEvent(NoteAddEditEvent.ContentChanged(it.toString()))
             }
-
-            btnGoBack.setOnClickListener {
-                findNavController().popBackStack()
-            }
-            btnSaveNote.setOnClickListener {
-                viewModel.onEvent(NoteAddEditEvent.NoteSubmitted)
-            }
         }
 
+        handleButtonClicks()
+    }
+
+    private fun handleButtonClicks() = binding.apply {
+        btnSaveNote.setOnClickListener {
+            viewModel.onEvent(NoteAddEditEvent.NoteSubmitted)
+        }
+        btnGoBack.setOnClickListener {
+            viewModel.onEvent(NoteAddEditEvent.BackButtonClicked)
+        }
     }
 
     private fun observeUiEvent() {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.noteAddEditEvent.collect { event ->
                 when (event) {
-                    is NoteAddViewModel.UiEvent.ShowSnackbar -> {
+                    is NoteAddViewModel.UiAddEditEvent.ShowSnackbar -> {
                         Snackbar.make(requireView(), event.message, Snackbar.LENGTH_SHORT).show()
                     }
-                    is NoteAddViewModel.UiEvent.NavigateToListScreen -> {
+                    is NoteAddViewModel.UiAddEditEvent.NavigateToListScreen -> {
+                        findNavController().navigate(R.id.action_add_edit_to_list)
+                    }
+                    is NoteAddViewModel.UiAddEditEvent.NavigateBack -> {
                         findNavController().popBackStack()
                     }
                 }
