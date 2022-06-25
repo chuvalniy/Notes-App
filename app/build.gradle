@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -40,6 +41,18 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation project(path: ':common')
     implementation project(path: ':feature-note')
+    implementation project(path: ':feature-authentication')
+
+    // Firebase Core
+    implementation platform('com.google.firebase:firebase-bom:30.2.0')
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+
+    // Firebase Auth
+    implementation 'com.google.firebase:firebase-auth-ktx:21.0.5'
+
+    // Firebase Realtime Database
+    implementation 'com.google.firebase:firebase-database-ktx:20.0.5'
+
 
     // Navigation Component
     def nav_version = "2.4.2"
