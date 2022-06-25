@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="vertical_guideline_spacing">32dp</dimen>
+    <dimen name="auth_form_height">56dp</dimen>
+    <dimen name="auth_helper_bottom_margin">8dp</dimen>
+    <dimen name="forgot_password_height">32dp</dimen>
+</resources>

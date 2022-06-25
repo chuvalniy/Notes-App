@@ -17,7 +17,7 @@
             android:id="@+id/btnGoBack"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:background="@drawable/searchview_background"
+            android:background="@drawable/background_rounded_gray_secondary"
             android:contentDescription="@string/go_back"
             android:padding="@dimen/icon_padding"
             android:src="@drawable/ic_baseline_arrow_back" />
@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="end"
-            android:background="@drawable/searchview_background"
+            android:background="@drawable/background_rounded_gray_secondary"
             android:contentDescription="@string/add_note"
             android:padding="@dimen/icon_padding"
             android:src="@drawable/ic_baseline_done" />

@@ -1,4 +1,14 @@
 <resources>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="auth_create_new_account">Create New Account</string>
+    <string name="auth_login">Login</string>
+    <string name="auth_password">Password</string>
+    <string name="auth_email">Email</string>
+    <string name="auth_go_to_login">Back to login</string>
+    <string name="auth_register_new_account">Register</string>
+    <string name="login_to_continue_hint">Login to continue</string>
+    <string name="welcome_back_hint">Welcome Back!</string>
+    <string name="create_new_account_hint">Create New Account</string>
+    <string name="auth_confirm_password">Confirm Password</string>
+    <string name="forgot_password">Forgot Password?</string>
 </resources>

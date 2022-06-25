@@ -8,32 +8,21 @@
     tools:context=".presentation.sign_in.SignInFragment">
 
     <TextView
+        android:id="@+id/tvCreateNewAccount"
         style="@style/TitleText"
-        android:id="@+id/tvGreetings"
-        android:layout_width="wrap_content"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:layout_marginTop="96dp"
-        android:text="@string/welcome_back_hint"
+        android:text="@string/create_new_account_hint"
         app:layout_constraintEnd_toStartOf="@+id/vertical_right_guideline"
         app:layout_constraintStart_toStartOf="@+id/vertical_left_guideline"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        style="@style/ContentTextStyling"
-        android:id="@+id/auth_login_to_continue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="@string/login_to_continue_hint"
-        app:layout_constraintEnd_toEndOf="@+id/tvGreetings"
-        app:layout_constraintStart_toStartOf="@+id/tvGreetings"
-        app:layout_constraintTop_toBottomOf="@+id/tvGreetings" />
-
-
     <EditText
         android:id="@+id/etEmail"
-        android:layout_width="0dp"
         style="@style/AuthFormStyle"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="96dp"
         android:background="@drawable/background_rounded_gray_secondary"
@@ -44,11 +33,11 @@
         android:padding="12dp"
         app:layout_constraintEnd_toStartOf="@+id/vertical_right_guideline"
         app:layout_constraintStart_toStartOf="@+id/vertical_left_guideline"
-        app:layout_constraintTop_toBottomOf="@+id/auth_login_to_continue" />
+        app:layout_constraintTop_toBottomOf="@+id/tvCreateNewAccount" />
 
     <EditText
-        style="@style/AuthFormStyle"
         android:id="@+id/etPassword"
+        style="@style/AuthFormStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -62,21 +51,24 @@
         app:layout_constraintStart_toStartOf="@+id/etEmail"
         app:layout_constraintTop_toBottomOf="@+id/etEmail" />
 
-    <TextView
-        android:id="@+id/btnForgotPassword"
-        style="@style/HelperText2"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/forgot_password_height"
-        android:gravity="center"
-        android:layout_marginTop="4dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:text="@string/forgot_password"
+    <EditText
+        android:id="@+id/etPasswordRepeat"
+        style="@style/AuthFormStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/background_rounded_gray_secondary"
+        android:ems="10"
+        android:hint="@string/auth_confirm_password"
+        android:inputType="textPassword"
+        android:minHeight="@dimen/auth_form_height"
+        android:padding="12dp"
         app:layout_constraintEnd_toEndOf="@+id/etPassword"
+        app:layout_constraintStart_toStartOf="@+id/etPassword"
         app:layout_constraintTop_toBottomOf="@+id/etPassword" />
 
     <TextView
-        android:id="@+id/btnLogin"
+        android:id="@+id/btnRegister"
         style="@style/Headline.h2"
         android:layout_width="0dp"
         android:layout_height="@dimen/auth_form_height"
@@ -86,25 +78,24 @@
         android:clickable="true"
         android:focusable="true"
         android:gravity="center"
-        android:text="@string/auth_login"
+        android:text="@string/auth_register_new_account"
         android:textAllCaps="true"
-        app:layout_constraintBottom_toTopOf="@+id/btnNewAccount"
+        app:layout_constraintBottom_toTopOf="@+id/btnGoToLogin"
         app:layout_constraintEnd_toStartOf="@+id/vertical_right_guideline"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/vertical_left_guideline"
-        app:layout_constraintTop_toBottomOf="@+id/btnForgotPassword"
-        app:layout_constraintVertical_bias="0.491" />
+        app:layout_constraintTop_toBottomOf="@+id/etPasswordRepeat" />
 
     <TextView
+        android:id="@+id/btnGoToLogin"
         style="@style/HelperText"
-        android:id="@+id/btnNewAccount"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/auth_form_height"
-        android:clickable="true"
         android:layout_marginBottom="@dimen/auth_helper_bottom_margin"
+        android:clickable="true"
         android:focusable="true"
         android:gravity="center"
-        android:text="@string/auth_create_new_account"
+        android:text="@string/auth_go_to_login"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/vertical_right_guideline"
         app:layout_constraintStart_toStartOf="@+id/vertical_left_guideline" />
