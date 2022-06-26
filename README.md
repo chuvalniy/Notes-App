@@ -37,5 +37,3 @@
 - Login / Register (edu purposes)
 - Push Notifications (edu purposes)
 - Color picker
-- Multiple language support?
-- Dark / White themes?
