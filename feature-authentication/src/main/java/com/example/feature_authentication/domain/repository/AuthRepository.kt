@@ -1,8 +1,11 @@
 package com.example.feature_authentication.domain.repository
 
+import com.example.feature_authentication.presentation.utils.AuthState
+import kotlinx.coroutines.flow.Flow
+
 interface AuthRepository {
 
-    suspend fun signUp(email: String, password: String)
+    fun signUp(email: String, password: String): Flow<AuthState>
 
-    suspend fun signIn(email: String, password: String)
+    fun signIn(email: String, password: String): Flow<AuthState>
 }

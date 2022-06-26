@@ -6,7 +6,7 @@ class SignUpUseCase(
     private val repository: AuthRepository
 ) {
     // TODO: add repeatedPassword parameter?
-    suspend operator fun invoke(
+    operator fun invoke(
         email: String,
         password: String
     ) = repository.signUp(email, password)
