@@ -6,8 +6,5 @@ class SignInUseCase(
     private val repository: AuthRepository
 ) {
 
-    operator fun invoke(
-        email: String,
-        password: String
-    ) = repository.signIn(email, password)
+    operator fun invoke(email: String, password: String) = repository.signIn(email, password)
 }

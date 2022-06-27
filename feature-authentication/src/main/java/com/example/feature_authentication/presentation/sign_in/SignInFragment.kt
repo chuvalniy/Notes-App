@@ -1,9 +1,11 @@
 package com.example.feature_authentication.presentation.sign_in
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -25,23 +27,31 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>() {
         observeUiEvent()
 
         handleButtonClicks()
+
+        binding.etEmail.addTextChangedListener {
+            viewModel.onEvent(SignInEvent.EmailChanged(it.toString()))
+        }
+
+        binding.etPassword.addTextChangedListener {
+            viewModel.onEvent(SignInEvent.PasswordChanged(it.toString()))
+        }
     }
 
     private fun observeUiEvent() {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.singInEvent.collect { event ->
                 when(event) {
-                    is SignInViewModel.UiAuthEvent.NavigateToNoteListScreen -> {
-
+                    is SignInViewModel.UiSignInEvent.NavigateToNoteListScreen -> {
+                        findNavController().navigate(Uri.parse("noteApp://noteList"))
                     }
-                    is SignInViewModel.UiAuthEvent.NavigateToRegisterScreen -> {
+                    is SignInViewModel.UiSignInEvent.NavigateToRegisterScreen -> {
                         findNavController().navigate(R.id.navigate_to_sign_up)
                     }
-                    is SignInViewModel.UiAuthEvent.ShowSnackbar -> {
+                    is SignInViewModel.UiSignInEvent.ShowSnackbar -> {
                         Snackbar.make(requireView(), event.message, Snackbar.LENGTH_LONG).show()
                     }
-                    is SignInViewModel.UiAuthEvent.ShowProgressBar -> {
-
+                    is SignInViewModel.UiSignInEvent.ShowProgressBar -> {
+                        binding.progressBar.isVisible = event.isLoading
                     }
                 }
             }
@@ -50,14 +60,6 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>() {
 
 
     private fun handleButtonClicks() {
-        binding.etEmail.addTextChangedListener {
-            viewModel.onEvent(SignInEvent.EmailChanged(it.toString()))
-        }
-
-        binding.etPassword.addTextChangedListener {
-            viewModel.onEvent(SignInEvent.PasswordChanged(it.toString()))
-        }
-
         binding.btnNewAccount.setOnClickListener {
             viewModel.onEvent(SignInEvent.RegisterNewAccountButtonClicked)
         }

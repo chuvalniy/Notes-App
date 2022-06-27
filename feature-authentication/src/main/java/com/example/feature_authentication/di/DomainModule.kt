@@ -1,8 +1,7 @@
 package com.example.feature_authentication.di
 
 import com.example.feature_authentication.domain.repository.AuthRepository
-import com.example.feature_authentication.domain.use_case.SignInUseCase
-import com.example.feature_authentication.domain.use_case.SignUpUseCase
+import com.example.feature_authentication.domain.use_case.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,4 +21,18 @@ object DomainModule {
         return SignUpUseCase(repository)
     }
 
+    @Provides
+    fun provideValidateEmailUseCase(): ValidateEmailUseCase {
+        return ValidateEmailUseCase()
+    }
+
+    @Provides
+    fun provideValidatePasswordUseCase(): ValidatePasswordUseCase {
+        return ValidatePasswordUseCase()
+    }
+
+    @Provides
+    fun provideValidateRepeatedPasswordUseCase(): ValidateRepeatedPasswordUseCase {
+        return ValidateRepeatedPasswordUseCase()
+    }
 }

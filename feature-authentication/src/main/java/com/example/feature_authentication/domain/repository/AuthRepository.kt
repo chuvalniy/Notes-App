@@ -1,11 +1,13 @@
 package com.example.feature_authentication.domain.repository
 
-import com.example.feature_authentication.presentation.utils.AuthState
+import com.example.common.utils.Resource
+import com.google.firebase.auth.AuthResult
 import kotlinx.coroutines.flow.Flow
 
 interface AuthRepository {
 
-    fun signUp(email: String, password: String): Flow<AuthState>
+    fun signUp(email: String, password: String): Flow<Resource<AuthResult>>
 
-    fun signIn(email: String, password: String): Flow<AuthState>
+    fun signIn(email: String, password: String): Flow<Resource<AuthResult>>
+
 }

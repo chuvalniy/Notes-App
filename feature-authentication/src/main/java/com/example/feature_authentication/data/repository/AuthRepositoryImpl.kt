@@ -1,47 +1,41 @@
 package com.example.feature_authentication.data.repository
 
-import android.util.Log
+import com.example.common.utils.Resource
 import com.example.feature_authentication.domain.repository.AuthRepository
-import com.example.feature_authentication.presentation.utils.AuthState
-import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.*
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.tasks.await
 
 class AuthRepositoryImpl(
     private val firebaseAuth: FirebaseAuth
 ) : AuthRepository {
 
-    override fun signUp(email: String, password: String) = flow {
-        emit(AuthState.Loading)
+    override fun signUp(email: String, password: String): Flow<Resource<AuthResult>> = flow {
+        emit(Resource.Loading())
 
         try {
-            firebaseAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        Log.d("AuthTest", "successfully created user")
-                    } else {
-                        Log.d("AuthTest", "failed to create user ${task.exception}")
-                    }
-                }
+            val result = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
+            emit(Resource.Success(result))
+        } catch (e: FirebaseAuthUserCollisionException) {
+            emit(Resource.Error(error = e.message))
+        } catch (e: FirebaseAuthWeakPasswordException) {
+            emit(Resource.Error(error = e.message))
+        } catch (e: FirebaseAuthInvalidCredentialsException) {
+            emit(Resource.Error(error = e.message))
         } catch (e: Exception) {
-            emit(AuthState.Error(e.message))
+            emit(Resource.Error(error = e.message))
         }
     }
 
-    override fun signIn(email: String, password: String) = flow {
-        emit(AuthState.Loading)
+    override fun signIn(email: String, password: String): Flow<Resource<AuthResult>> = flow {
+        emit(Resource.Loading())
 
         try {
-            firebaseAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        Log.d("AuthTest", "successfully logged in")
-                    } else {
-                        Log.d("AuthTest", "failed to log in ${task.exception}")
-                    }
-                }
+            val result = firebaseAuth.signInWithEmailAndPassword(email, password).await()
+            emit(Resource.Success(result))
         } catch (e: Exception) {
-            emit(AuthState.Error("Excpetion: ${e.message}"))
+            emit(Resource.Error(error = e.message))
         }
     }
-
 }

@@ -47,6 +47,9 @@
         <action
             android:id="@+id/action_list_to_dialog_sort"
             app:destination="@id/dialog_sort" />
+        <deepLink
+            android:id="@+id/deepLinkNoteList"
+            app:uri="noteApp://noteList"/>
     </fragment>
     <fragment
         android:id="@+id/detail"
