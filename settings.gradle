@@ -16,3 +16,4 @@ rootProject.name = "Notes"
 include ':app'
 include ':feature-note'
 include ':common'
+include ':feature-authentication'

@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph"
+    android:id="@+id/note_nav_graph"
     app:startDestination="@id/list">
 
     <fragment
@@ -47,6 +47,9 @@
         <action
             android:id="@+id/action_list_to_dialog_sort"
             app:destination="@id/dialog_sort" />
+        <deepLink
+            android:id="@+id/deepLinkNoteList"
+            app:uri="noteApp://noteList"/>
     </fragment>
     <fragment
         android:id="@+id/detail"
