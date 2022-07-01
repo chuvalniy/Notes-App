@@ -14,3 +14,4 @@ inline fun SearchView.onQueryTextChanged(crossinline listener: (String) -> Unit)
         }
     })
 }
+

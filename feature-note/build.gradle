@@ -39,6 +39,18 @@ android {
 dependencies {
     implementation project(path: ':common')
 
+    // Firebase Core
+    implementation platform('com.google.firebase:firebase-bom:30.2.0')
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+
+    // Firebase Auth
+    implementation 'com.google.firebase:firebase-auth-ktx:21.0.5'
+
+    // Firebase Realtime Database
+    implementation 'com.google.firebase:firebase-database-ktx:20.0.5'
+    implementation 'com.google.firebase:firebase-firestore-ktx:24.2.0'
+
+
     // Navigation Component
     def nav_version = "2.4.2"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
@@ -60,6 +72,7 @@ dependencies {
     // Coroutines
     def coroutine_version = "1.6.1"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:$coroutine_version"
 
     // Room
     def room_version = "2.4.2"

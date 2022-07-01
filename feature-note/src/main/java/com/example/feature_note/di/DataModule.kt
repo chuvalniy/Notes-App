@@ -3,8 +3,10 @@ package com.example.feature_note.di
 import android.app.Application
 import android.content.Context
 import androidx.room.Room
-import com.example.feature_note.data.local.settings.PreferencesManager
 import com.example.feature_note.data.local.cache.NoteDatabase
+import com.example.feature_note.data.remote.NoteFirestore
+import com.example.feature_note.data.remote.NoteFirestoreImpl
+import com.example.feature_note.data.local.settings.PreferencesManager
 import com.example.feature_note.data.local.settings.PreferencesManagerImpl
 import com.example.feature_note.data.repository.NoteRepositoryImpl
 import com.example.feature_note.domain.repository.NoteRepository
@@ -25,8 +27,14 @@ object DataModule {
         return Room.databaseBuilder(
             application,
             NoteDatabase::class.java,
-            "note_db"
+            NoteDatabase.DATABASE_NAME
         ).build()
+    }
+
+    @Singleton
+    @Provides
+    fun provideNoteFirestore(): NoteFirestore {
+        return NoteFirestoreImpl()
     }
 
     @Singleton
@@ -35,8 +43,10 @@ object DataModule {
         return PreferencesManagerImpl(context)
     }
 
+    @Singleton
     @Provides
-    fun provideNoteRepository(db: NoteDatabase): NoteRepository {
-        return NoteRepositoryImpl(db.dao)
+    fun provideNoteRepository(api: NoteFirestore, db: NoteDatabase): NoteRepository {
+        return NoteRepositoryImpl(api, db)
     }
+
 }

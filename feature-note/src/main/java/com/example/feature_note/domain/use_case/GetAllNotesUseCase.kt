@@ -8,7 +8,7 @@ class GetAllNotesUseCase(
 ) {
 
     operator fun invoke(
-        searchQuery: String,
+        query: String,
         sortType: SortType
-    ) = repository.getAllNotes(searchQuery, sortType)
+    ) = repository.getFilteredNotes(query, sortType)
 }

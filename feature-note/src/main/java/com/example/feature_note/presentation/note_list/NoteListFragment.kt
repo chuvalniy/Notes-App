@@ -34,7 +34,6 @@ class NoteListFragment : BaseFragment<FragmentNoteListBinding>() {
         handleSearch()
         handleButtonClicks()
     }
-
     private fun observeUiEvent() {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.noteListEventFlow.collect { event ->
@@ -42,7 +41,7 @@ class NoteListFragment : BaseFragment<FragmentNoteListBinding>() {
                     is NoteListViewModel.UiNoteListEvent.ShowUndoDeleteNoteMessage -> {
                         showUndoDeleteNoteMessage(event.note)
                     }
-                    is NoteListViewModel.UiNoteListEvent.NavigateToAddNoteScreen -> {
+                    is NoteListViewModel.UiNoteListEvent.NavigateToAddEditScreen -> {
                         findNavController().navigate(R.id.action_noteListFragment_to_noteAddFragment)
                     }
                     is NoteListViewModel.UiNoteListEvent.NavigateToDetailsNoteScreen -> {

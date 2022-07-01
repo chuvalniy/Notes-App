@@ -2,14 +2,18 @@ package com.example.feature_note.data.local.cache
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.example.feature_note.domain.model.Note
+import com.example.feature_note.data.local.cache.model.NoteCacheEntity
 
 @Database(
-    entities = [Note::class],
+    entities = [NoteCacheEntity::class],
     version = 1,
     exportSchema = false
 )
 abstract class NoteDatabase : RoomDatabase() {
 
     abstract val dao: NoteDao
+
+    companion object {
+        const val DATABASE_NAME = "note_db"
+    }
 }
