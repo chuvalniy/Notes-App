@@ -1,38 +1,28 @@
 package com.example.feature_authentication.di
 
-import com.example.feature_authentication.domain.repository.AuthRepository
 import com.example.feature_authentication.domain.use_case.*
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ViewModelComponent
+import com.example.feature_note.domain.use_case.ValidateTitleUseCase
+import org.koin.dsl.module
 
-@Module
-@InstallIn(ViewModelComponent::class)
-object DomainModule {
+val authDomainModule = module {
 
-    @Provides
-    fun provideSignInUseCase(repository: AuthRepository): SignInUseCase {
-        return SignInUseCase(repository)
+    factory {
+        SignInUseCase(repository = get())
     }
 
-    @Provides
-    fun provideSignUpUseCase(repository: AuthRepository): SignUpUseCase {
-        return SignUpUseCase(repository)
+    factory {
+        SignUpUseCase(repository = get())
     }
 
-    @Provides
-    fun provideValidateEmailUseCase(): ValidateEmailUseCase {
-        return ValidateEmailUseCase()
+    factory {
+        ValidateEmailUseCase()
     }
 
-    @Provides
-    fun provideValidatePasswordUseCase(): ValidatePasswordUseCase {
-        return ValidatePasswordUseCase()
+    factory {
+        ValidatePasswordUseCase()
     }
 
-    @Provides
-    fun provideValidateRepeatedPasswordUseCase(): ValidateRepeatedPasswordUseCase {
-        return ValidateRepeatedPasswordUseCase()
+    factory {
+        ValidateRepeatedPasswordUseCase()
     }
 }

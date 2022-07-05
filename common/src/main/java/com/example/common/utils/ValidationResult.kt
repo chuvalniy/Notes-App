@@ -1,4 +1,4 @@
-package com.example.feature_authentication.domain.use_case
+package com.example.common.utils
 
 data class ValidationResult(
     val successful: Boolean,

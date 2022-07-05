@@ -8,6 +8,10 @@ interface NoteRepository {
 
     suspend fun synchronizeNotes()
 
+    suspend fun synchronizeDeletedNotes()
+
+    suspend fun restoreDeletedNote(note: Note)
+
     fun getFilteredNotes(query: String, sortType: SortType): Flow<List<Note>>
 
     suspend fun insertNote(note: Note)

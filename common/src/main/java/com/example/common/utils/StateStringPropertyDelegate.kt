@@ -9,7 +9,7 @@ class StateStringPropertyDelegate(
     private val key: String,
     savedValue: String? = null,
     initialValue: String,
-): ReadWriteProperty<Any, String> {
+) : ReadWriteProperty<Any, String> {
 
     private var currentValue = state.get<String>(key) ?: savedValue ?: initialValue
 

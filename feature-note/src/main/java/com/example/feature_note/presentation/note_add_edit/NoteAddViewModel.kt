@@ -7,21 +7,21 @@ import com.example.common.utils.StateStringPropertyDelegate
 import com.example.feature_note.domain.model.Note
 import com.example.feature_note.domain.use_case.InsertNoteUseCase
 import com.example.feature_note.domain.use_case.UpdateNoteUseCase
-import dagger.hilt.android.lifecycle.HiltViewModel
+import com.example.feature_note.domain.use_case.ValidateTitleUseCase
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import java.util.*
-import javax.inject.Inject
 
-@HiltViewModel
-class NoteAddViewModel @Inject constructor(
+
+class NoteAddViewModel(
     private val insertNoteUseCase: InsertNoteUseCase,
     private val updateNoteUseCase: UpdateNoteUseCase,
+    private val validateTitleUseCase: ValidateTitleUseCase,
     state: SavedStateHandle
 ) : ViewModel() {
 
-    val note = state.get<Note>("note")
+    private val note = state.get<Note>("note")
 
     var noteTitle by StateStringPropertyDelegate(state, "title", note?.title, "")
     var noteContent by StateStringPropertyDelegate(state, "content", note?.content, "")
@@ -52,11 +52,8 @@ class NoteAddViewModel @Inject constructor(
     }
 
     private fun submitNote() {
-        // TODO: create use case for validation
-        if (noteTitle.isEmpty()) {
-            showInvalidInputMessage("The title can't be blank") // TODO: use string resoureces
-            return
-        }
+
+        if (!isValidationSuccessful()) return
 
         if (note != null) {
             val updatedNote = note.copy(
@@ -64,6 +61,7 @@ class NoteAddViewModel @Inject constructor(
                 content = noteContent,
             )
             updateNote(updatedNote)
+
         } else {
             val newNote = Note(
                 id = noteId,
@@ -75,10 +73,18 @@ class NoteAddViewModel @Inject constructor(
         }
     }
 
-    private fun navigateBack() {
-        viewModelScope.launch {
-            _noteAddEditChannel.send(UiAddEditEvent.NavigateBack)
+    private fun isValidationSuccessful(): Boolean {
+        val titleResult = validateTitleUseCase(noteTitle)
+        if (!titleResult.successful) {
+            showSnackbar(titleResult.errorMessage ?: "")
+            return false
         }
+
+        return true
+    }
+
+    private fun navigateBack() = viewModelScope.launch {
+        _noteAddEditChannel.send(UiAddEditEvent.NavigateBack)
     }
 
     private fun updateNote(note: Note) = viewModelScope.launch {
@@ -91,7 +97,7 @@ class NoteAddViewModel @Inject constructor(
         _noteAddEditChannel.send(UiAddEditEvent.NavigateToListScreen)
     }
 
-    private fun showInvalidInputMessage(text: String) = viewModelScope.launch {
+    private fun showSnackbar(text: String) = viewModelScope.launch {
         _noteAddEditChannel.send(UiAddEditEvent.ShowSnackbar(text))
     }
 

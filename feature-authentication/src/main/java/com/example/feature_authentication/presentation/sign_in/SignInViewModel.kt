@@ -1,24 +1,28 @@
 package com.example.feature_authentication.presentation.sign_in
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.common.settings.UserSessionStorage
 import com.example.common.utils.Resource
 import com.example.feature_authentication.domain.use_case.SignInUseCase
 import com.example.feature_authentication.domain.use_case.ValidateEmailUseCase
 import com.example.feature_authentication.domain.use_case.ValidatePasswordUseCase
-import dagger.hilt.android.lifecycle.HiltViewModel
+import com.example.feature_note.domain.use_case.SynchronizeNotesUseCase
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import org.koin.core.KoinApplication.Companion.init
 
-@HiltViewModel
-class SignInViewModel @Inject constructor(
+
+class SignInViewModel(
     private val signInUseCase: SignInUseCase,
     private val validateEmail: ValidateEmailUseCase,
-    private val validatePassword: ValidatePasswordUseCase
+    private val validatePassword: ValidatePasswordUseCase,
+    private val synchronizeNotesUseCase: SynchronizeNotesUseCase,
+    userSessionStorage: UserSessionStorage
 ) : ViewModel() {
 
     private var email: String = ""
@@ -26,6 +30,12 @@ class SignInViewModel @Inject constructor(
 
     private val _signInChannel = Channel<UiSignInEvent>()
     val singInEvent = _signInChannel.receiveAsFlow()
+
+    init {
+        if (userSessionStorage.getUserSessionId().isNotBlank()) {
+            navigateToNoteListScreen()
+        }
+    }
 
     fun onEvent(event: SignInEvent) {
         when (event) {
@@ -37,14 +47,14 @@ class SignInViewModel @Inject constructor(
     }
 
     private fun signInUser() {
-        if (!isValidationSucceeded()) {
-            return
-        }
+        if (!isValidationSuccessful()) return
+
         viewModelScope.launch {
             signInUseCase(email, password).onEach { event ->
                 when (event) {
                     is Resource.Loading -> showProgressBar(true)
                     is Resource.Success -> {
+                        synchronizeNotesUseCase()
                         showProgressBar(false)
                         navigateToNoteListScreen()
                     }
@@ -57,7 +67,7 @@ class SignInViewModel @Inject constructor(
         }
     }
 
-    private fun isValidationSucceeded(): Boolean {
+    private fun isValidationSuccessful(): Boolean {
         val emailResult = validateEmail(email)
         if (!emailResult.successful) {
             showSnackbar(emailResult.errorMessage ?: "")
@@ -100,7 +110,7 @@ class SignInViewModel @Inject constructor(
     sealed class UiSignInEvent {
         data class ShowSnackbar(val message: String) : UiSignInEvent()
         data class ShowProgressBar(val isLoading: Boolean) : UiSignInEvent()
-        object NavigateToRegisterScreen : UiSignInEvent()
         object NavigateToNoteListScreen : UiSignInEvent()
+        object NavigateToRegisterScreen : UiSignInEvent()
     }
 }

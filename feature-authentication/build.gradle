@@ -2,7 +2,7 @@ plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
-    id 'dagger.hilt.android.plugin'
+    id "androidx.navigation.safeargs.kotlin"
 }
 
 android {
@@ -38,6 +38,8 @@ dependencies {
 
     // Modules
     implementation project(path: ':common')
+    implementation project(path: ':feature-note')
+
 
     // Firebase Core
     implementation platform('com.google.firebase:firebase-bom:30.2.0')
@@ -49,10 +51,8 @@ dependencies {
     // Firebase Realtime Database
     implementation 'com.google.firebase:firebase-database-ktx:20.0.5'
 
-    // Dagger Hilt
-    implementation "com.google.dagger:hilt-android:2.38.1"
-    kapt "com.google.dagger:hilt-compiler:2.38.1"
-    kapt 'androidx.hilt:hilt-compiler:1.0.0'
+    // Koin
+    implementation "io.insert-koin:koin-android:3.2.0-beta-1"
 
     // DataStore
     implementation "androidx.datastore:datastore-preferences:1.0.0"

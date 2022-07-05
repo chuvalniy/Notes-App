@@ -3,7 +3,7 @@ package com.example.feature_note.domain.use_case
 import com.example.feature_note.data.local.settings.SortType
 import com.example.feature_note.domain.repository.NoteRepository
 
-class GetAllNotesUseCase(
+class GetFilteredNotesUseCase(
     private val repository: NoteRepository
 ) {
 

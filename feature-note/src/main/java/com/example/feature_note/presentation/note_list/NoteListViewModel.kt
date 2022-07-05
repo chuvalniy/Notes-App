@@ -1,24 +1,26 @@
 package com.example.feature_note.presentation.note_list
 
-import androidx.lifecycle.*
+import android.util.Log
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asFlow
+import androidx.lifecycle.viewModelScope
 import com.example.feature_note.data.local.settings.PreferencesManager
 import com.example.feature_note.data.local.settings.SortType
 import com.example.feature_note.domain.model.Note
 import com.example.feature_note.domain.use_case.DeleteNoteUseCase
-import com.example.feature_note.domain.use_case.GetAllNotesUseCase
-import com.example.feature_note.domain.use_case.InsertNoteUseCase
-import dagger.hilt.android.lifecycle.HiltViewModel
+import com.example.feature_note.domain.use_case.GetFilteredNotesUseCase
+import com.example.feature_note.domain.use_case.RestoreDeletedNoteUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-class NoteListViewModel @Inject constructor(
-    private val getAllNotesUseCase: GetAllNotesUseCase,
+
+class NoteListViewModel(
+    private val getFilteredNotesUseCase: GetFilteredNotesUseCase,
     private val deleteNoteUseCase: DeleteNoteUseCase,
-    private val insertNoteUseCase: InsertNoteUseCase,
+    private val restoreDeletedNoteUseCase: RestoreDeletedNoteUseCase,
     private val preferencesManager: PreferencesManager,
     state: SavedStateHandle
 ) : ViewModel() {
@@ -37,7 +39,7 @@ class NoteListViewModel @Inject constructor(
     ) { query, preferences ->
         Pair(query, preferences)
     }.flatMapLatest { (searchQuery, preferences) ->
-        getAllNotesUseCase(searchQuery, preferences.sortType)
+        getFilteredNotesUseCase(searchQuery, preferences.sortType)
     }
 
     val notes = notesFlow.stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
@@ -68,7 +70,9 @@ class NoteListViewModel @Inject constructor(
     }
 
     private fun restoreDeletedNote(note: Note) {
-        viewModelScope.launch { insertNoteUseCase(note) }
+        viewModelScope.launch {
+            restoreDeletedNoteUseCase(note)
+        }
     }
 
     private fun navigateToAddEditScreen() {

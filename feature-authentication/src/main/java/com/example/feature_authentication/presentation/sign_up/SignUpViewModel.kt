@@ -2,25 +2,26 @@ package com.example.feature_authentication.presentation.sign_up
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.common.settings.UserSessionStorage
 import com.example.common.utils.Resource
 import com.example.feature_authentication.domain.use_case.SignUpUseCase
 import com.example.feature_authentication.domain.use_case.ValidateEmailUseCase
 import com.example.feature_authentication.domain.use_case.ValidatePasswordUseCase
 import com.example.feature_authentication.domain.use_case.ValidateRepeatedPasswordUseCase
-import dagger.hilt.android.lifecycle.HiltViewModel
+import com.example.feature_note.domain.use_case.SynchronizeNotesUseCase
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-class SignUpViewModel @Inject constructor(
+class SignUpViewModel(
     private val signUpUseCase: SignUpUseCase,
     private val validateEmailUseCase: ValidateEmailUseCase,
     private val validatePasswordUseCase: ValidatePasswordUseCase,
-    private val validateRepeatedPasswordUseCase: ValidateRepeatedPasswordUseCase
+    private val validateRepeatedPasswordUseCase: ValidateRepeatedPasswordUseCase,
+    private val synchronizeNotesUseCase: SynchronizeNotesUseCase,
+    userSessionStorage: UserSessionStorage
 ) : ViewModel() {
 
     private var email: String = ""
@@ -29,6 +30,13 @@ class SignUpViewModel @Inject constructor(
 
     private val _signUpChannel = Channel<UiSignUpEvent>()
     val signUpEvent = _signUpChannel.receiveAsFlow()
+
+    init {
+        if (userSessionStorage.getUserSessionId().isNotBlank()) {
+            navigateToNoteListScreen()
+        }
+    }
+
 
     fun onEvent(event: SignUpEvent) {
         when (event) {
@@ -53,6 +61,7 @@ class SignUpViewModel @Inject constructor(
                     }
                     is Resource.Loading -> showProgressBar(true)
                     is Resource.Success -> {
+                        synchronizeNotesUseCase()
                         showProgressBar(false)
                         navigateToNoteListScreen()
                     }

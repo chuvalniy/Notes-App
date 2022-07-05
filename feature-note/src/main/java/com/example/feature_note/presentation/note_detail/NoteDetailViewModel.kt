@@ -3,33 +3,23 @@ package com.example.feature_note.presentation.note_detail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.common.utils.StateStringPropertyDelegate
 import com.example.feature_note.domain.model.Note
 import com.example.feature_note.domain.use_case.DeleteNoteUseCase
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-class NoteDetailViewModel @Inject constructor(
+
+class NoteDetailViewModel(
     private val deleteNoteUseCase: DeleteNoteUseCase,
-    private val state: SavedStateHandle
+    state: SavedStateHandle
 ) : ViewModel() {
 
     private val note = state.get<Note>("note")
 
-    var noteTitle = state.get<String>("title") ?: note?.title ?: ""
-        set(value) {
-            field = value
-            state.set("title", value)
-        }
-
-    var noteContent = state.get<String>("content") ?: note?.content ?: ""
-        set(value) {
-            field = value
-            state.set("content", value)
-        }
+    var noteTitle by StateStringPropertyDelegate(state, "title", note?.title, "")
+    var noteContent by StateStringPropertyDelegate(state, "content", note?.content, "")
 
     private val _noteDetailsChannel = Channel<UiNoteDetailsEvent>()
     val noteDetailsEvent get() = _noteDetailsChannel.receiveAsFlow()
@@ -38,7 +28,7 @@ class NoteDetailViewModel @Inject constructor(
         when (noteDetailEvent) {
             is NoteDetailEvent.NoteDeleted -> {
                 viewModelScope.launch {
-                    note?.let {
+                    note?.let { note ->
                         deleteNoteUseCase(note)
                         _noteDetailsChannel.send(UiNoteDetailsEvent.NavigateToListScreen)
                     }
@@ -46,8 +36,8 @@ class NoteDetailViewModel @Inject constructor(
             }
             is NoteDetailEvent.EditButtonClicked -> {
                 viewModelScope.launch {
-                    note?.let {
-                        _noteDetailsChannel.send(UiNoteDetailsEvent.NavigateToDetailsScreen(note))
+                    note?.let { note ->
+                        _noteDetailsChannel.send(UiNoteDetailsEvent.NavigateToAddEditScreen(note))
                     }
                 }
             }
@@ -58,8 +48,8 @@ class NoteDetailViewModel @Inject constructor(
     }
 
     sealed class UiNoteDetailsEvent {
-        data class NavigateToDetailsScreen(val note: Note) : UiNoteDetailsEvent()
-        object NavigateBack: UiNoteDetailsEvent()
-        object NavigateToListScreen: UiNoteDetailsEvent()
+        data class NavigateToAddEditScreen(val note: Note) : UiNoteDetailsEvent()
+        object NavigateBack : UiNoteDetailsEvent()
+        object NavigateToListScreen : UiNoteDetailsEvent()
     }
 }

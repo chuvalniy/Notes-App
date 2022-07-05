@@ -2,6 +2,7 @@ package com.example.feature_authentication.presentation.sign_in
 
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,12 +15,11 @@ import com.example.common.ui.BaseFragment
 import com.example.feature_authentication.R
 import com.example.feature_authentication.databinding.FragmentSignInBinding
 import com.google.android.material.snackbar.Snackbar
-import dagger.hilt.android.AndroidEntryPoint
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-@AndroidEntryPoint
 class SignInFragment : BaseFragment<FragmentSignInBinding>() {
 
-    private val viewModel: SignInViewModel by viewModels()
+    private val viewModel by viewModel<SignInViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -40,9 +40,11 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>() {
     private fun observeUiEvent() {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.singInEvent.collect { event ->
-                when(event) {
+                when (event) {
                     is SignInViewModel.UiSignInEvent.NavigateToNoteListScreen -> {
-                        findNavController().navigate(Uri.parse("noteApp://noteList"))
+                        findNavController().navigate(
+                            Uri.parse("noteApp://noteList")
+                        )
                     }
                     is SignInViewModel.UiSignInEvent.NavigateToRegisterScreen -> {
                         findNavController().navigate(R.id.navigate_to_sign_up)

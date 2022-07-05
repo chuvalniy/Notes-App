@@ -11,4 +11,10 @@ interface NoteFirestore {
     suspend fun deleteNote(noteRemoteEntity: NoteRemoteEntity)
 
     suspend fun updateNote(noteRemoteEntity: NoteRemoteEntity)
+
+    suspend fun insertDeletedNote(noteRemoteEntity: NoteRemoteEntity)
+
+    suspend fun deleteDeletedNote(noteRemoteEntity: NoteRemoteEntity)
+
+    suspend fun getDeletedNotes(): List<NoteRemoteEntity>
 }

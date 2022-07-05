@@ -11,22 +11,43 @@ import com.example.feature_note.domain.model.Note
 import com.example.feature_note.domain.repository.NoteRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.io.IOException
 
 class NoteRepositoryImpl(
     private val api: NoteFirestore,
-    private val db: NoteDatabase
+    db: NoteDatabase
 ) : NoteRepository {
 
     private val dao = db.dao
 
     override suspend fun synchronizeNotes() {
-        val remoteNotes = api.getAllNotes()
-        val localNotes = dao.getAllNotes().toMutableList()
+        try {
+            val remoteNotes = api.getAllNotes()
+            val localNotes = dao.getAllNotes().toMutableList()
 
-        for(note in remoteNotes) {
-            dao.getNoteById(note.id)?.let { cachedNote ->
-                localNotes.remove(cachedNote)
-            } ?: dao.insertNote(note.toNoteCacheEntity())
+            for (note in remoteNotes) {
+                dao.getNoteById(note.id)?.let { cachedNote ->
+                    localNotes.remove(cachedNote)
+                } ?: dao.insertNote(note.toNoteCacheEntity())
+            }
+        } catch (e: IOException) {
+
+        } catch (e: Exception) {
+
+        }
+    }
+
+    override suspend fun synchronizeDeletedNotes() {
+        try {
+            val remoteNotes = api.getDeletedNotes()
+
+            for (note in remoteNotes) {
+                dao.deleteNote(note.toNoteCacheEntity())
+            }
+        } catch (e: IOException) {
+
+        } catch (e: Exception) {
+
         }
     }
 
@@ -37,26 +58,59 @@ class NoteRepositoryImpl(
 
 
     override suspend fun insertNote(note: Note) {
-        val cacheEntity = note.toNoteCacheEntity()
-        dao.insertNote(cacheEntity)
+        try {
+            val cacheEntity = note.toNoteCacheEntity()
+            dao.insertNote(cacheEntity)
+            val remoteEntity = cacheEntity.toNoteRemoteEntity()
+            api.insertNote(remoteEntity)
+        } catch (e: IOException) {
 
-        val remoteEntity = cacheEntity.toNoteRemoteEntity()
-        api.insertNote(remoteEntity)
+        } catch (e: Exception) {
+
+        }
+    }
+
+    override suspend fun restoreDeletedNote(note: Note) {
+        try {
+            val cacheEntity = note.toNoteCacheEntity()
+            dao.insertNote(cacheEntity)
+
+            val remoteEntity = cacheEntity.toNoteRemoteEntity()
+            api.insertNote(remoteEntity)
+            api.deleteDeletedNote(remoteEntity)
+        } catch (e: IOException) {
+
+        } catch (e: Exception) {
+
+        }
     }
 
     override suspend fun deleteNote(note: Note) {
-        val cacheEntity = note.toNoteCacheEntity()
-        dao.deleteNote(cacheEntity)
+        try {
+            val cacheEntity = note.toNoteCacheEntity()
+            dao.deleteNote(cacheEntity)
 
-        val remoteEntity = cacheEntity.toNoteRemoteEntity()
-        api.deleteNote(remoteEntity)
+            val remoteEntity = cacheEntity.toNoteRemoteEntity()
+            api.deleteNote(remoteEntity)
+            api.insertDeletedNote(remoteEntity)
+        } catch (e: IOException) {
+
+        } catch (e: Exception) {
+
+        }
     }
 
     override suspend fun updateNote(note: Note) {
-        val cacheEntity = note.toNoteCacheEntity()
-        dao.updateNote(cacheEntity)
+        try {
+            val cacheEntity = note.toNoteCacheEntity()
+            dao.updateNote(cacheEntity)
 
-        val remoteEntity = cacheEntity.toNoteRemoteEntity()
-        api.updateNote(remoteEntity)
+            val remoteEntity = cacheEntity.toNoteRemoteEntity()
+            api.updateNote(remoteEntity)
+        } catch (e: IOException) {
+
+        } catch (e: Exception) {
+
+        }
     }
 }

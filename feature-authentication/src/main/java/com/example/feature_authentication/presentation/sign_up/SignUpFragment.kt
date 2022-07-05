@@ -2,6 +2,7 @@ package com.example.feature_authentication.presentation.sign_up
 
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,13 +14,12 @@ import androidx.navigation.fragment.findNavController
 import com.example.common.ui.BaseFragment
 import com.example.feature_authentication.databinding.FragmentSignUpBinding
 import com.google.android.material.snackbar.Snackbar
-import dagger.hilt.android.AndroidEntryPoint
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-@AndroidEntryPoint
 class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
 
-    private val viewModel: SignUpViewModel by viewModels()
+    private val viewModel by viewModel<SignUpViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -56,7 +56,10 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
                         findNavController().popBackStack()
                     }
                     is SignUpViewModel.UiSignUpEvent.NavigateToNoteListScreen -> {
-                        findNavController().navigate(Uri.parse("noteApp://noteList"))
+
+                        findNavController().navigate(
+                            Uri.parse("noteApp://noteList")
+                        )
                     }
                     is SignUpViewModel.UiSignUpEvent.ShowProgressBar -> {
                         binding.progressBar.isVisible = event.isLoading
