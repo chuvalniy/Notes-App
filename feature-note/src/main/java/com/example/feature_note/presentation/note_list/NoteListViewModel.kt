@@ -1,10 +1,10 @@
 package com.example.feature_note.presentation.note_list
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
+import com.example.common.utils.Resource
 import com.example.feature_note.data.local.settings.PreferencesManager
 import com.example.feature_note.data.local.settings.SortType
 import com.example.feature_note.domain.model.Note
@@ -64,14 +64,24 @@ class NoteListViewModel(
 
     private fun swipeToDeleteNote(note: Note) {
         viewModelScope.launch {
-            deleteNoteUseCase(note)
+            deleteNoteUseCase(note).onEach { event ->
+                when (event) {
+                    is Resource.Error -> showSnackbar(event.error ?: "")
+                    else -> Unit
+                }
+            }.launchIn(this)
             _noteListEventChannel.send(UiNoteListEvent.ShowUndoDeleteNoteMessage(note))
         }
     }
 
     private fun restoreDeletedNote(note: Note) {
         viewModelScope.launch {
-            restoreDeletedNoteUseCase(note)
+            restoreDeletedNoteUseCase(note).onEach { event ->
+                when (event) {
+                    is Resource.Error -> showSnackbar(event.error ?: "")
+                    else -> Unit
+                }
+            }.launchIn(this)
         }
     }
 
@@ -93,7 +103,14 @@ class NoteListViewModel(
         }
     }
 
+    private fun showSnackbar(message: String) {
+        viewModelScope.launch {
+            _noteListEventChannel.send(UiNoteListEvent.ShowSnackbar(message))
+        }
+    }
+
     sealed class UiNoteListEvent {
+        data class ShowSnackbar(val message: String) : UiNoteListEvent()
         data class ShowUndoDeleteNoteMessage(val note: Note) : UiNoteListEvent()
         data class NavigateToDetailsNoteScreen(val note: Note) : UiNoteListEvent()
         object NavigateToAddEditScreen : UiNoteListEvent()

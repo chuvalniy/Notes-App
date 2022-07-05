@@ -3,10 +3,13 @@ package com.example.feature_note.presentation.note_detail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.common.utils.Resource
 import com.example.common.utils.StateStringPropertyDelegate
 import com.example.feature_note.domain.model.Note
 import com.example.feature_note.domain.use_case.DeleteNoteUseCase
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
@@ -29,7 +32,12 @@ class NoteDetailViewModel(
             is NoteDetailEvent.NoteDeleted -> {
                 viewModelScope.launch {
                     note?.let { note ->
-                        deleteNoteUseCase(note)
+                        deleteNoteUseCase(note).onEach { event ->
+                            when (event) {
+                                is Resource.Error -> showSnackbar(event.error ?: "")
+                                else -> Unit
+                            }
+                        }.launchIn(this)
                         _noteDetailsChannel.send(UiNoteDetailsEvent.NavigateToListScreen)
                     }
                 }
@@ -47,8 +55,14 @@ class NoteDetailViewModel(
         }
     }
 
+    private fun showSnackbar(text: String) = viewModelScope.launch {
+        _noteDetailsChannel.send(UiNoteDetailsEvent.ShowSnackbar(text))
+    }
+
+
     sealed class UiNoteDetailsEvent {
         data class NavigateToAddEditScreen(val note: Note) : UiNoteDetailsEvent()
+        data class ShowSnackbar(val message: String) : UiNoteDetailsEvent()
         object NavigateBack : UiNoteDetailsEvent()
         object NavigateToListScreen : UiNoteDetailsEvent()
     }

@@ -7,5 +7,5 @@ class DeleteNoteUseCase(
     private val repository: NoteRepository
 ) {
 
-    suspend operator fun invoke(note: Note) = repository.deleteNote(note)
+    operator fun invoke(note: Note) = repository.deleteNote(note)
 }

@@ -1,10 +1,12 @@
 package com.example.feature_authentication.presentation.sign_in
 
 import android.util.Log
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.common.settings.UserSessionStorage
 import com.example.common.utils.Resource
+import com.example.common.utils.StateStringPropertyDelegate
 import com.example.feature_authentication.domain.use_case.SignInUseCase
 import com.example.feature_authentication.domain.use_case.ValidateEmailUseCase
 import com.example.feature_authentication.domain.use_case.ValidatePasswordUseCase
@@ -22,11 +24,20 @@ class SignInViewModel(
     private val validateEmail: ValidateEmailUseCase,
     private val validatePassword: ValidatePasswordUseCase,
     private val synchronizeNotesUseCase: SynchronizeNotesUseCase,
-    userSessionStorage: UserSessionStorage
+    userSessionStorage: UserSessionStorage,
+    state: SavedStateHandle
 ) : ViewModel() {
 
-    private var email: String = ""
-    private var password: String = ""
+    private var email by StateStringPropertyDelegate(
+        state,
+        "email",
+        initialValue = ""
+    )
+    private var password by StateStringPropertyDelegate(
+        state,
+        "password",
+        initialValue = ""
+    )
 
     private val _signInChannel = Channel<UiSignInEvent>()
     val singInEvent = _signInChannel.receiveAsFlow()

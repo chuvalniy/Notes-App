@@ -55,6 +55,9 @@ class NoteListFragment : BaseFragment<FragmentNoteListBinding>() {
                     is NoteListViewModel.UiNoteListEvent.NavigateToSortDialogScreen -> {
                         findNavController().navigate(R.id.action_list_to_dialog_sort)
                     }
+                    is NoteListViewModel.UiNoteListEvent.ShowSnackbar -> {
+                        Snackbar.make(requireView(), event.message, Snackbar.LENGTH_SHORT).show()
+                    }
                 }
             }
         }

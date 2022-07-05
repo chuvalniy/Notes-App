@@ -7,5 +7,5 @@ class RestoreDeletedNoteUseCase(
     private val repository: NoteRepository
 ) {
 
-    suspend operator fun invoke(note: Note) = repository.restoreDeletedNote(note)
+    operator fun invoke(note: Note) = repository.restoreDeletedNote(note)
 }

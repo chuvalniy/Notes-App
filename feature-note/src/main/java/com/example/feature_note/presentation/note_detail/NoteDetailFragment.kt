@@ -10,6 +10,7 @@ import androidx.navigation.fragment.navArgs
 import com.example.common.ui.BaseFragment
 import com.example.feature_note.R
 import com.example.feature_note.databinding.FragmentNoteDetailBinding
+import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.stateViewModel
 
 class NoteDetailFragment : BaseFragment<FragmentNoteDetailBinding>() {
@@ -43,6 +44,9 @@ class NoteDetailFragment : BaseFragment<FragmentNoteDetailBinding>() {
                     }
                     is NoteDetailViewModel.UiNoteDetailsEvent.NavigateBack -> {
                         findNavController().navigateUp()
+                    }
+                    is NoteDetailViewModel.UiNoteDetailsEvent.ShowSnackbar -> {
+                        Snackbar.make(requireView(), event.message, Snackbar.LENGTH_SHORT).show()
                     }
                 }
             }

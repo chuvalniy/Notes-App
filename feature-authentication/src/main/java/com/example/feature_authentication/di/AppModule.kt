@@ -13,7 +13,8 @@ val authAppModule = module {
             validateEmail = get(),
             validatePassword = get(),
             synchronizeNotesUseCase = get(),
-            userSessionStorage = get()
+            userSessionStorage = get(),
+            state = get()
         )
     }
 
@@ -24,7 +25,8 @@ val authAppModule = module {
             validatePasswordUseCase = get(),
             validateRepeatedPasswordUseCase = get(),
             synchronizeNotesUseCase = get(),
-            userSessionStorage = get()
+            userSessionStorage = get(),
+            state = get()
         )
     }
 }

@@ -14,12 +14,13 @@ import androidx.navigation.fragment.findNavController
 import com.example.common.ui.BaseFragment
 import com.example.feature_authentication.databinding.FragmentSignUpBinding
 import com.google.android.material.snackbar.Snackbar
+import org.koin.androidx.viewmodel.ext.android.stateViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
 
-    private val viewModel by viewModel<SignUpViewModel>()
+    private val viewModel by stateViewModel<SignUpViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

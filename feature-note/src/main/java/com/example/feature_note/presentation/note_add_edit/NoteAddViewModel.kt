@@ -3,12 +3,15 @@ package com.example.feature_note.presentation.note_add_edit
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.common.utils.Resource
 import com.example.common.utils.StateStringPropertyDelegate
 import com.example.feature_note.domain.model.Note
 import com.example.feature_note.domain.use_case.InsertNoteUseCase
 import com.example.feature_note.domain.use_case.UpdateNoteUseCase
 import com.example.feature_note.domain.use_case.ValidateTitleUseCase
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import java.util.*
@@ -88,12 +91,22 @@ class NoteAddViewModel(
     }
 
     private fun updateNote(note: Note) = viewModelScope.launch {
-        updateNoteUseCase(note)
+        updateNoteUseCase(note).onEach { event ->
+            when(event) {
+                is Resource.Error -> showSnackbar(event.error ?: "")
+                else -> Unit
+            }
+        }.launchIn(this)
         _noteAddEditChannel.send(UiAddEditEvent.NavigateToListScreen)
     }
 
     private fun insertNote(note: Note) = viewModelScope.launch {
-        insertNoteUseCase(note)
+        insertNoteUseCase(note).onEach { event ->
+            when(event) {
+                is Resource.Error -> showSnackbar(event.error ?: "")
+                else -> Unit
+            }
+        }.launchIn(this)
         _noteAddEditChannel.send(UiAddEditEvent.NavigateToListScreen)
     }
 

@@ -15,11 +15,12 @@ import com.example.common.ui.BaseFragment
 import com.example.feature_authentication.R
 import com.example.feature_authentication.databinding.FragmentSignInBinding
 import com.google.android.material.snackbar.Snackbar
+import org.koin.androidx.viewmodel.ext.android.stateViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SignInFragment : BaseFragment<FragmentSignInBinding>() {
 
-    private val viewModel by viewModel<SignInViewModel>()
+    private val viewModel by stateViewModel<SignInViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
