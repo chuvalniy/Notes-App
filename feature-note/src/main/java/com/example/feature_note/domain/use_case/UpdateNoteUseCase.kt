@@ -7,5 +7,5 @@ class UpdateNoteUseCase(
     private val repository: NoteRepository
 ) {
 
-    operator fun invoke(note: Note) = repository.updateNote(note)
+    suspend operator fun invoke(note: Note) = repository.updateNote(note)
 }

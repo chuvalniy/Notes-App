@@ -11,4 +11,8 @@
     <string name="create_new_account_hint">Create New Account</string>
     <string name="auth_confirm_password">Confirm Password</string>
     <string name="forgot_password">Forgot Password?</string>
+    <string name="repeated_password_error">The passwords doesn\'t match</string>
+    <string name="empty_password_field">The password can\'t be blank</string>
+    <string name="empty_email_field">The email can\'t be blank</string>
+    <string name="unexpected_error">Unexpected error occurred</string>
 </resources>

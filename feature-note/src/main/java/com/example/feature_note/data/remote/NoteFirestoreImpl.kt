@@ -1,11 +1,9 @@
 package com.example.feature_note.data.remote
 
-import android.util.Log
 import com.example.common.settings.UserSessionStorage
 import com.example.common.utils.Constants
 import com.example.feature_note.data.remote.model.NoteRemoteEntity
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.tasks.await
 
 class NoteFirestoreImpl(
@@ -16,8 +14,6 @@ class NoteFirestoreImpl(
     private val userId get() = userSessionStorage.getUserSessionId()
 
     override suspend fun getAllNotes(): List<NoteRemoteEntity> {
-        Log.d("TestError", "sync in all notes rpeo, user id - $userId")
-
         return firestore
             .collection(Constants.FIRE_STORE_NOTE_TABLE)
             .document(userId)
@@ -60,9 +56,9 @@ class NoteFirestoreImpl(
 
     override suspend fun insertDeletedNote(noteRemoteEntity: NoteRemoteEntity) {
         firestore
-            .collection(Constants.FIRE_STORE_NOTE_TABLE)
+            .collection(Constants.FIRE_STORE_DELETED_NOTES)
             .document(userId)
-            .collection(Constants.FIRE_STORE_NOTE_TABLE)
+            .collection(Constants.FIRE_STORE_DELETED_NOTES)
             .document(noteRemoteEntity.id)
             .set(noteRemoteEntity)
             .await()
@@ -70,21 +66,19 @@ class NoteFirestoreImpl(
 
     override suspend fun deleteDeletedNote(noteRemoteEntity: NoteRemoteEntity) {
         firestore
-            .collection(Constants.FIRE_STORE_NOTE_TABLE)
+            .collection(Constants.FIRE_STORE_DELETED_NOTES)
             .document(userId)
-            .collection(Constants.FIRE_STORE_NOTE_TABLE)
+            .collection(Constants.FIRE_STORE_DELETED_NOTES)
             .document(noteRemoteEntity.id)
             .delete()
             .await()
     }
 
     override suspend fun getDeletedNotes(): List<NoteRemoteEntity> {
-        Log.d("TestError", "sync in deleted notes rpeo, user id - $userId")
-
         return firestore
-            .collection(Constants.FIRE_STORE_NOTE_TABLE)
+            .collection(Constants.FIRE_STORE_DELETED_NOTES)
             .document(userId)
-            .collection(Constants.FIRE_STORE_NOTE_TABLE)
+            .collection(Constants.FIRE_STORE_DELETED_NOTES)
             .get()
             .await()
             .toObjects(NoteRemoteEntity::class.java)

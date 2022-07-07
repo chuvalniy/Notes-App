@@ -3,15 +3,14 @@ package com.example.feature_note.presentation.note_add_edit
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.common.utils.Resource
+import com.example.common.ui.UiText
+import com.example.common.utils.Constants
 import com.example.common.utils.StateStringPropertyDelegate
 import com.example.feature_note.domain.model.Note
 import com.example.feature_note.domain.use_case.InsertNoteUseCase
 import com.example.feature_note.domain.use_case.UpdateNoteUseCase
 import com.example.feature_note.domain.use_case.ValidateTitleUseCase
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import java.util.*
@@ -26,20 +25,29 @@ class NoteAddViewModel(
 
     private val note = state.get<Note>("note")
 
-    var noteTitle by StateStringPropertyDelegate(state, "title", note?.title, "")
-    var noteContent by StateStringPropertyDelegate(state, "content", note?.content, "")
-
+    var noteTitle by StateStringPropertyDelegate(
+        state = state,
+        key = "title",
+        initialValue = Constants.EMPTY_VALUE,
+        savedValue = note?.title,
+    )
+    var noteContent by StateStringPropertyDelegate(
+        state = state,
+        key = "content",
+        initialValue = Constants.EMPTY_VALUE,
+        savedValue = note?.content
+    )
     private var noteColor by StateStringPropertyDelegate(
-        state,
-        "color",
-        note?.color,
-        Note.colors.random()
+        state = state,
+        key = "color",
+        initialValue = Note.colors.random(),
+        savedValue = note?.color,
     )
     private var noteId by StateStringPropertyDelegate(
-        state,
-        "id",
-        note?.id,
-        UUID.randomUUID().toString()
+        state = state,
+        key = "id",
+        initialValue = UUID.randomUUID().toString(),
+        savedValue = note?.id,
     )
 
     private val _noteAddEditChannel = Channel<UiAddEditEvent>()
@@ -55,7 +63,6 @@ class NoteAddViewModel(
     }
 
     private fun submitNote() {
-
         if (!isValidationSuccessful()) return
 
         if (note != null) {
@@ -79,7 +86,7 @@ class NoteAddViewModel(
     private fun isValidationSuccessful(): Boolean {
         val titleResult = validateTitleUseCase(noteTitle)
         if (!titleResult.successful) {
-            showSnackbar(titleResult.errorMessage ?: "")
+            showSnackbar(titleResult.errorMessage!!) // TODO
             return false
         }
 
@@ -91,31 +98,21 @@ class NoteAddViewModel(
     }
 
     private fun updateNote(note: Note) = viewModelScope.launch {
-        updateNoteUseCase(note).onEach { event ->
-            when(event) {
-                is Resource.Error -> showSnackbar(event.error ?: "")
-                else -> Unit
-            }
-        }.launchIn(this)
+        updateNoteUseCase(note)
         _noteAddEditChannel.send(UiAddEditEvent.NavigateToListScreen)
     }
 
     private fun insertNote(note: Note) = viewModelScope.launch {
-        insertNoteUseCase(note).onEach { event ->
-            when(event) {
-                is Resource.Error -> showSnackbar(event.error ?: "")
-                else -> Unit
-            }
-        }.launchIn(this)
+        insertNoteUseCase(note)
         _noteAddEditChannel.send(UiAddEditEvent.NavigateToListScreen)
     }
 
-    private fun showSnackbar(text: String) = viewModelScope.launch {
-        _noteAddEditChannel.send(UiAddEditEvent.ShowSnackbar(text))
+    private fun showSnackbar(message: UiText) = viewModelScope.launch {
+        _noteAddEditChannel.send(UiAddEditEvent.ShowSnackbar(message = message))
     }
 
     sealed class UiAddEditEvent {
-        data class ShowSnackbar(val message: String) : UiAddEditEvent()
+        data class ShowSnackbar(val message: UiText) : UiAddEditEvent()
         object NavigateToListScreen : UiAddEditEvent()
         object NavigateBack : UiAddEditEvent()
     }

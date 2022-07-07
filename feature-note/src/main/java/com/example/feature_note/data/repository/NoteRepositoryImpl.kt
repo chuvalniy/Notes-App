@@ -1,7 +1,7 @@
 package com.example.feature_note.data.repository
 
 
-import com.example.common.utils.Resource
+import android.util.Log
 import com.example.feature_note.data.local.cache.NoteDatabase
 import com.example.feature_note.data.local.settings.SortType
 import com.example.feature_note.data.mapper.toNoteCacheEntity
@@ -10,11 +10,8 @@ import com.example.feature_note.data.mapper.toNoteRemoteEntity
 import com.example.feature_note.data.remote.NoteFirestore
 import com.example.feature_note.domain.model.Note
 import com.example.feature_note.domain.repository.NoteRepository
-import com.google.firebase.FirebaseNetworkException
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
-import java.io.IOException
 
 class NoteRepositoryImpl(
     private val api: NoteFirestore,
@@ -23,8 +20,12 @@ class NoteRepositoryImpl(
 
     private val dao = db.dao
 
-    override fun synchronizeNotes(): Flow<Resource<String>> = flow {
-        emit(Resource.Loading())
+    override fun getFilteredNotes(query: String, sortType: SortType): Flow<List<Note>> {
+        val localData = dao.getFilteredNotes(query, sortType)
+        return localData.map { it.map { notes -> notes.toNoteDomain() } }
+    }
+
+    override suspend fun synchronizeNotes() {
 
         try {
             val deletedRemoteNotes = api.getDeletedNotes()
@@ -34,7 +35,6 @@ class NoteRepositoryImpl(
                 dao.deleteNote(noteCacheEntity)
             }
 
-
             val remoteNotes = api.getAllNotes()
             val localNotes = dao.getAllNotes() as ArrayList
 
@@ -43,25 +43,12 @@ class NoteRepositoryImpl(
                     localNotes.remove(cachedNote)
                 } ?: dao.insertNote(remoteNote.toNoteCacheEntity())
             }
-
-        } catch (e: IOException) {
-            emit(Resource.Error(error = e.message)) // TODO
-        } catch (e: FirebaseNetworkException) {
-            emit(Resource.Error(error = e.message)) // TODO
         } catch (e: Exception) {
-            emit(Resource.Error(error = e.message)) // TODO
+            Log.d("RepositoryException", e.localizedMessage ?: "Error")
         }
     }
 
-    override fun getFilteredNotes(query: String, sortType: SortType): Flow<List<Note>> {
-        val localData = dao.getFilteredNotes(query, sortType)
-        return localData.map { it.map { notes -> notes.toNoteDomain() } }
-    }
-
-
-    override fun insertNote(note: Note): Flow<Resource<String>> = flow {
-        emit(Resource.Loading())
-
+    override suspend fun insertNote(note: Note) {
         try {
             val cacheEntity = note.toNoteCacheEntity()
             dao.insertNote(cacheEntity)
@@ -69,18 +56,12 @@ class NoteRepositoryImpl(
             val remoteEntity = cacheEntity.toNoteRemoteEntity()
             api.insertNote(remoteEntity)
 
-        } catch (e: IOException) {
-            emit(Resource.Error(error = e.message))
-        } catch (e: FirebaseNetworkException) {
-            emit(Resource.Error(error = e.message))
         } catch (e: Exception) {
-            emit(Resource.Error(error = e.message)) // TODO
+            Log.d("RepositoryException", e.localizedMessage ?: "Error")
         }
     }
 
-    override fun restoreDeletedNote(note: Note): Flow<Resource<String>> = flow {
-        emit(Resource.Loading())
-
+    override suspend fun restoreDeletedNote(note: Note) {
         try {
             val cacheEntity = note.toNoteCacheEntity()
             dao.insertNote(cacheEntity)
@@ -88,18 +69,12 @@ class NoteRepositoryImpl(
             val remoteEntity = cacheEntity.toNoteRemoteEntity()
             api.insertNote(remoteEntity)
             api.deleteDeletedNote(remoteEntity)
-        } catch (e: IOException) {
-            emit(Resource.Error(error = e.message))
-        } catch (e: FirebaseNetworkException) {
-            emit(Resource.Error(error = e.message))
         } catch (e: Exception) {
-            emit(Resource.Error(error = e.message)) // TODO
+            Log.d("RepositoryException", e.localizedMessage ?: "Error")
         }
     }
 
-    override fun deleteNote(note: Note): Flow<Resource<String>> = flow {
-        emit(Resource.Loading())
-
+    override suspend fun deleteNote(note: Note) {
         try {
             val cacheEntity = note.toNoteCacheEntity()
             dao.deleteNote(cacheEntity)
@@ -107,30 +82,20 @@ class NoteRepositoryImpl(
             val remoteEntity = cacheEntity.toNoteRemoteEntity()
             api.deleteNote(remoteEntity)
             api.insertDeletedNote(remoteEntity)
-        } catch (e: IOException) {
-            emit(Resource.Error(error = e.message))
-        } catch (e: FirebaseNetworkException) {
-            emit(Resource.Error(error = e.message))
         } catch (e: Exception) {
-            emit(Resource.Error(error = e.message)) // TODO
+            Log.d("RepositoryException", e.localizedMessage ?: "Error")
         }
     }
 
-    override fun updateNote(note: Note): Flow<Resource<String>> = flow {
-        emit(Resource.Loading())
-
+    override suspend fun updateNote(note: Note) {
         try {
             val cacheEntity = note.toNoteCacheEntity()
             dao.updateNote(cacheEntity)
 
             val remoteEntity = cacheEntity.toNoteRemoteEntity()
             api.updateNote(remoteEntity)
-        } catch (e: IOException) {
-            emit(Resource.Error(error = e.message))
-        } catch (e: FirebaseNetworkException) {
-            emit(Resource.Error(error = e.message))
         } catch (e: Exception) {
-            emit(Resource.Error(error = e.message)) // TODO
+            Log.d("RepositoryException", e.localizedMessage ?: "Error")
         }
     }
 }

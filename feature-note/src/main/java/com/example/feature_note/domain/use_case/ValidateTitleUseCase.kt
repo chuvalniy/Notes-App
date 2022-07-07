@@ -1,6 +1,8 @@
 package com.example.feature_note.domain.use_case
 
+import com.example.common.ui.UiText
 import com.example.common.utils.ValidationResult
+import com.example.feature_note.R
 
 class ValidateTitleUseCase {
 
@@ -8,7 +10,9 @@ class ValidateTitleUseCase {
         if (title.isBlank()) {
             return ValidationResult(
                 successful = false,
-                errorMessage = "The title can't be blank"
+                errorMessage = UiText.StringResource(
+                    R.string.blank_title_error
+                )
             )
         }
 

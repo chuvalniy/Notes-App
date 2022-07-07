@@ -7,11 +7,9 @@ import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.example.common.ui.BaseFragment
 import com.example.feature_note.R
 import com.example.feature_note.databinding.FragmentNoteAddBinding
-import com.example.feature_note.presentation.note_detail.NoteDetailFragmentArgs
 import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.stateViewModel
 
@@ -64,7 +62,11 @@ class NoteAddFragment : BaseFragment<FragmentNoteAddBinding>() {
             viewModel.noteAddEditEvent.collect { event ->
                 when (event) {
                     is NoteAddViewModel.UiAddEditEvent.ShowSnackbar -> {
-                        Snackbar.make(requireView(), event.message, Snackbar.LENGTH_SHORT).show()
+                        Snackbar.make(
+                            requireView(),
+                            event.message.asString(requireActivity()),
+                            Snackbar.LENGTH_SHORT
+                        ).show()
                     }
                     is NoteAddViewModel.UiAddEditEvent.NavigateToListScreen -> {
                         findNavController().navigate(R.id.action_add_edit_to_list)

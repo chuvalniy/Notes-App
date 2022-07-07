@@ -1,12 +1,14 @@
 package com.example.feature_authentication.presentation.sign_in
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.common.settings.UserSessionStorage
+import com.example.common.ui.UiText
+import com.example.common.utils.Constants
 import com.example.common.utils.Resource
 import com.example.common.utils.StateStringPropertyDelegate
+import com.example.feature_authentication.R
 import com.example.feature_authentication.domain.use_case.SignInUseCase
 import com.example.feature_authentication.domain.use_case.ValidateEmailUseCase
 import com.example.feature_authentication.domain.use_case.ValidatePasswordUseCase
@@ -16,7 +18,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import org.koin.core.KoinApplication.Companion.init
 
 
 class SignInViewModel(
@@ -29,14 +30,14 @@ class SignInViewModel(
 ) : ViewModel() {
 
     private var email by StateStringPropertyDelegate(
-        state,
-        "email",
-        initialValue = ""
+        state = state,
+        key = "email",
+        initialValue = Constants.EMPTY_VALUE
     )
     private var password by StateStringPropertyDelegate(
-        state,
-        "password",
-        initialValue = ""
+        state = state,
+        key = "password",
+        initialValue = Constants.EMPTY_VALUE
     )
 
     private val _signInChannel = Channel<UiSignInEvent>()
@@ -70,7 +71,9 @@ class SignInViewModel(
                         navigateToNoteListScreen()
                     }
                     is Resource.Error -> {
-                        showSnackbar(event.error ?: "")
+                        event.error?.let { errorMessage ->
+                            showSnackbar(UiText.DynamicString(errorMessage))
+                        } ?: showSnackbar(UiText.StringResource(R.string.unexpected_error))
                         showProgressBar(false)
                     }
                 }
@@ -81,45 +84,41 @@ class SignInViewModel(
     private fun isValidationSuccessful(): Boolean {
         val emailResult = validateEmail(email)
         if (!emailResult.successful) {
-            showSnackbar(emailResult.errorMessage ?: "")
+            showSnackbar(emailResult.errorMessage!!)
             return false
         }
 
         val passwordResult = validatePassword(password)
         if (!passwordResult.successful) {
-            showSnackbar(passwordResult.errorMessage ?: "")
+            showSnackbar(passwordResult.errorMessage!!)
             return false
         }
 
         return true
     }
 
-    private fun navigateToNoteListScreen() {
-        viewModelScope.launch {
-            _signInChannel.send(UiSignInEvent.NavigateToNoteListScreen)
-        }
+    private fun navigateToNoteListScreen() = viewModelScope.launch {
+        _signInChannel.send(UiSignInEvent.NavigateToNoteListScreen)
     }
 
-    private fun navigateToRegisterScreen() {
-        viewModelScope.launch {
-            _signInChannel.send(UiSignInEvent.NavigateToRegisterScreen)
-        }
+
+    private fun navigateToRegisterScreen() = viewModelScope.launch {
+        _signInChannel.send(UiSignInEvent.NavigateToRegisterScreen)
     }
 
-    private fun showSnackbar(message: String) {
-        viewModelScope.launch {
-            _signInChannel.send(UiSignInEvent.ShowSnackbar(message))
-        }
+
+    private fun showSnackbar(message: UiText) = viewModelScope.launch {
+        _signInChannel.send(UiSignInEvent.ShowSnackbar(message = message))
     }
 
-    private fun showProgressBar(isLoading: Boolean) {
-        viewModelScope.launch {
-            _signInChannel.send(UiSignInEvent.ShowProgressBar(isLoading))
-        }
+
+    private fun showProgressBar(isLoading: Boolean) = viewModelScope.launch {
+        _signInChannel.send(UiSignInEvent.ShowProgressBar(isLoading))
     }
+
 
     sealed class UiSignInEvent {
-        data class ShowSnackbar(val message: String) : UiSignInEvent()
+        data class ShowSnackbar(val message: UiText) : UiSignInEvent()
         data class ShowProgressBar(val isLoading: Boolean) : UiSignInEvent()
         object NavigateToNoteListScreen : UiSignInEvent()
         object NavigateToRegisterScreen : UiSignInEvent()

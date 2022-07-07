@@ -7,8 +7,8 @@ import kotlin.reflect.KProperty
 class StateStringPropertyDelegate(
     private val state: SavedStateHandle,
     private val key: String,
-    savedValue: String? = null,
     initialValue: String,
+    savedValue: String? = null
 ) : ReadWriteProperty<Any, String> {
 
     private var currentValue = state.get<String>(key) ?: savedValue ?: initialValue

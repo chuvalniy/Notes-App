@@ -2,20 +2,17 @@ package com.example.feature_authentication.presentation.sign_up
 
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.common.ui.BaseFragment
 import com.example.feature_authentication.databinding.FragmentSignUpBinding
 import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.stateViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
@@ -26,8 +23,12 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
         super.onViewCreated(view, savedInstanceState)
 
         observeUiEvent()
-        handleButtonClicks()
 
+        handleButtonClicks()
+        listenToTextChange()
+    }
+
+    private fun listenToTextChange() {
         binding.etEmail.addTextChangedListener {
             viewModel.onEvent(SignUpEvent.EmailChanged(it.toString()))
         }
@@ -57,16 +58,20 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
                         findNavController().popBackStack()
                     }
                     is SignUpViewModel.UiSignUpEvent.NavigateToNoteListScreen -> {
-
-                        findNavController().navigate(
-                            Uri.parse("noteApp://noteList")
-                        )
+                        findNavController().apply {
+                            popBackStack()
+                            navigate(Uri.parse("noteApp://noteList"))
+                        }
                     }
                     is SignUpViewModel.UiSignUpEvent.ShowProgressBar -> {
                         binding.progressBar.isVisible = event.isLoading
                     }
                     is SignUpViewModel.UiSignUpEvent.ShowSnackbar -> {
-                        Snackbar.make(requireView(), event.message, Snackbar.LENGTH_LONG).show()
+                        Snackbar.make(
+                            requireView(),
+                            event.message.asString(requireActivity()),
+                            Snackbar.LENGTH_LONG
+                        ).show()
                     }
                 }
             }

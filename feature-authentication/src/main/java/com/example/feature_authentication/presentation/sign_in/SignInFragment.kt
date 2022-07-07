@@ -2,13 +2,11 @@ package com.example.feature_authentication.presentation.sign_in
 
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.common.ui.BaseFragment
@@ -16,7 +14,6 @@ import com.example.feature_authentication.R
 import com.example.feature_authentication.databinding.FragmentSignInBinding
 import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.stateViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SignInFragment : BaseFragment<FragmentSignInBinding>() {
 
@@ -28,7 +25,10 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>() {
         observeUiEvent()
 
         handleButtonClicks()
+        listenToTextChange()
+    }
 
+    private fun listenToTextChange() {
         binding.etEmail.addTextChangedListener {
             viewModel.onEvent(SignInEvent.EmailChanged(it.toString()))
         }
@@ -43,15 +43,20 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>() {
             viewModel.singInEvent.collect { event ->
                 when (event) {
                     is SignInViewModel.UiSignInEvent.NavigateToNoteListScreen -> {
-                        findNavController().navigate(
-                            Uri.parse("noteApp://noteList")
-                        )
+                        findNavController().apply {
+                            popBackStack()
+                            navigate(Uri.parse("noteApp://noteList"))
+                        }
                     }
                     is SignInViewModel.UiSignInEvent.NavigateToRegisterScreen -> {
                         findNavController().navigate(R.id.navigate_to_sign_up)
                     }
                     is SignInViewModel.UiSignInEvent.ShowSnackbar -> {
-                        Snackbar.make(requireView(), event.message, Snackbar.LENGTH_LONG).show()
+                        Snackbar.make(
+                            requireView(),
+                            event.message.asString(requireActivity()),
+                            Snackbar.LENGTH_LONG
+                        ).show()
                     }
                     is SignInViewModel.UiSignInEvent.ShowProgressBar -> {
                         binding.progressBar.isVisible = event.isLoading

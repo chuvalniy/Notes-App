@@ -45,9 +45,6 @@ class NoteDetailFragment : BaseFragment<FragmentNoteDetailBinding>() {
                     is NoteDetailViewModel.UiNoteDetailsEvent.NavigateBack -> {
                         findNavController().navigateUp()
                     }
-                    is NoteDetailViewModel.UiNoteDetailsEvent.ShowSnackbar -> {
-                        Snackbar.make(requireView(), event.message, Snackbar.LENGTH_SHORT).show()
-                    }
                 }
             }
         }

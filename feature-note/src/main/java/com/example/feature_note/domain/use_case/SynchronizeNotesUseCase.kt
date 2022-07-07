@@ -6,6 +6,6 @@ class SynchronizeNotesUseCase(
     private val repository: NoteRepository
 ) {
 
-    operator fun invoke() = repository.synchronizeNotes()
+    suspend operator fun invoke() = repository.synchronizeNotes()
 
 }
