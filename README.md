@@ -23,8 +23,10 @@
 
 - MVVM
 - Room
+- Firebase (Auth, Firestore)
 - DataStore
-- Dagger Hilt
+- Shared Preferences
+- Koin
 - Navigation Component
 - ViewModel
 - Coroutines
@@ -34,6 +36,5 @@
 
 ## Todo
 
-- Login / Register (edu purposes)
-- Push Notifications (edu purposes)
+- Logout / Reset password
 - Color picker
