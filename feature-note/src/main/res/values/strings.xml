@@ -21,5 +21,6 @@
     <string name="sort_bottom_fragment">Sort</string>
     <string name="sort_by_ascending">By ascending</string>
     <string name="sort_by_descending">By descending</string>
+    <string name="blank_title_error">The title can\'t be blank</string>
 
 </resources>

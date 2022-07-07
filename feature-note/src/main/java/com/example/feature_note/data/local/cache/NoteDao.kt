@@ -1,35 +1,41 @@
 package com.example.feature_note.data.local.cache
 
 import androidx.room.*
+import com.example.feature_note.data.local.cache.model.NoteCacheEntity
 import com.example.feature_note.data.local.settings.SortType
-import com.example.feature_note.domain.model.Note
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface NoteDao {
 
-    fun getAllNotes(searchQuery: String, sortType: SortType): Flow<List<Note>> =
+    fun getFilteredNotes(searchQuery: String, sortType: SortType): Flow<List<NoteCacheEntity>> =
         when (sortType) {
             SortType.ASCENDING -> {
-                getAllNotesByAscending(searchQuery)
+                getNotesByAscending(searchQuery)
             }
             SortType.DESCENDING -> {
-                getAllNotesByDescending(searchQuery)
+                getNotesByDescending(searchQuery)
             }
         }
 
     @Query("SELECT * FROM note_db WHERE title LIKE '%' || :searchQuery || '%' ORDER BY timestamp ASC")
-    fun getAllNotesByAscending(searchQuery: String): Flow<List<Note>>
+    fun getNotesByAscending(searchQuery: String): Flow<List<NoteCacheEntity>>
 
     @Query("SELECT * FROM note_db WHERE title LIKE '%' || :searchQuery || '%' ORDER BY timestamp DESC")
-    fun getAllNotesByDescending(searchQuery: String): Flow<List<Note>>
+    fun getNotesByDescending(searchQuery: String): Flow<List<NoteCacheEntity>>
+
+    @Query("SELECT * FROM note_db")
+    suspend fun getAllNotes(): List<NoteCacheEntity>
 
     @Delete
-    suspend fun deleteNote(note: Note)
+    suspend fun deleteNote(note: NoteCacheEntity)
 
     @Insert
-    suspend fun insertNote(note: Note)
+    suspend fun insertNote(note: NoteCacheEntity)
 
     @Update
-    suspend fun updateNote(note: Note)
+    suspend fun updateNote(note: NoteCacheEntity)
+
+    @Query("SELECT * FROM note_db WHERE id = :id")
+    suspend fun getNoteById(id: String): NoteCacheEntity?
 }

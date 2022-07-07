@@ -29,7 +29,7 @@
         android:label="fragment_note_list"
         tools:layout="@layout/fragment_note_list" >
         <action
-            android:id="@+id/action_noteListFragment_to_noteAddFragment"
+            android:id="@+id/action_list_to_add_edit"
             app:destination="@id/add_edit"
             app:enterAnim="@anim/enter_anim_right"
             app:exitAnim="@anim/exit_anim_right"
@@ -73,6 +73,7 @@
         <argument
             android:name="note"
             app:argType="com.example.feature_note.domain.model.Note" />
+
     </fragment>
     <dialog
         android:id="@+id/dialog_sort"

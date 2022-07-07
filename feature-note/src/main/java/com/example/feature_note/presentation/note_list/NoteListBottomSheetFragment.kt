@@ -10,13 +10,15 @@ import com.example.feature_note.data.local.settings.SortType
 import com.example.feature_note.databinding.FragmentNoteListBottomSheetBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.flow.first
+import org.koin.androidx.viewmodel.ext.android.sharedStateViewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class NoteListBottomSheetFragment : BottomSheetDialogFragment() {
 
     private var _binding: FragmentNoteListBottomSheetBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: NoteListViewModel by activityViewModels()
+    private val viewModel by sharedStateViewModel<NoteListViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,

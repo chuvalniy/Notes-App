@@ -4,29 +4,28 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
+import com.example.common.utils.Constants
 import com.example.feature_note.data.local.settings.PreferencesManager
+import com.example.feature_note.data.local.settings.SortType
 import com.example.feature_note.domain.model.Note
 import com.example.feature_note.domain.use_case.DeleteNoteUseCase
-import com.example.feature_note.domain.use_case.GetAllNotesUseCase
-import com.example.feature_note.domain.use_case.InsertNoteUseCase
-import dagger.hilt.android.lifecycle.HiltViewModel
+import com.example.feature_note.domain.use_case.GetFilteredNotesUseCase
+import com.example.feature_note.domain.use_case.RestoreDeletedNoteUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-class NoteListViewModel @Inject constructor(
-    private val getAllNotesUseCase: GetAllNotesUseCase,
+
+class NoteListViewModel(
+    private val getFilteredNotesUseCase: GetFilteredNotesUseCase,
     private val deleteNoteUseCase: DeleteNoteUseCase,
-    private val insertNoteUseCase: InsertNoteUseCase,
+    private val restoreDeletedNoteUseCase: RestoreDeletedNoteUseCase,
     private val preferencesManager: PreferencesManager,
     state: SavedStateHandle
 ) : ViewModel() {
 
-    private val searchQuery = state.getLiveData("searchQuery", "")
-
+    private val searchQuery = state.getLiveData("searchQuery", Constants.EMPTY_VALUE)
     val preferencesFlow = preferencesManager.getUserSettings()
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -35,8 +34,8 @@ class NoteListViewModel @Inject constructor(
         preferencesFlow
     ) { query, preferences ->
         Pair(query, preferences)
-    }.flatMapLatest { (searchQuery, preferencesFlow) ->
-        getAllNotesUseCase(searchQuery, preferencesFlow.sortType)
+    }.flatMapLatest { (searchQuery, preferences) ->
+        getFilteredNotesUseCase(searchQuery, preferences.sortType)
     }
 
     val notes = notesFlow.stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
@@ -44,42 +43,51 @@ class NoteListViewModel @Inject constructor(
     private val _noteListEventChannel = Channel<UiNoteListEvent>()
     val noteListEventFlow get() = _noteListEventChannel.receiveAsFlow()
 
-
     fun onEvent(event: NoteListEvent) {
         when (event) {
-            is NoteListEvent.QueryEntered -> searchQuery.value = event.query
-            is NoteListEvent.SortOrderSelected -> {
-                viewModelScope.launch { preferencesManager.saveSortType(event.sortType) }
-            }
-            is NoteListEvent.NoteSwiped -> {
-                viewModelScope.launch {
-                    deleteNoteUseCase(event.note)
-                    _noteListEventChannel.send(UiNoteListEvent.ShowUndoDeleteNoteMessage(event.note))
-                }
-            }
-            is NoteListEvent.DeletedNoteRestored -> {
-                viewModelScope.launch { insertNoteUseCase(event.note) }
-            }
-            is NoteListEvent.AddNewNoteClicked -> {
-                viewModelScope.launch { _noteListEventChannel.send(UiNoteListEvent.NavigateToAddNoteScreen) }
-            }
-            is NoteListEvent.NoteSelected -> {
-                viewModelScope.launch {
-                    _noteListEventChannel.send(UiNoteListEvent.NavigateToDetailsNoteScreen(event.note))
-                }
-            }
-            is NoteListEvent.SortButtonClicked -> {
-                viewModelScope.launch {
-                    _noteListEventChannel.send(UiNoteListEvent.NavigateToSortDialogScreen)
-                }
-            }
+            is NoteListEvent.QueryEntered -> onQueryChanged(event.query)
+            is NoteListEvent.SortOrderSelected -> saveSortType(event.sortType)
+            is NoteListEvent.NoteSwiped -> swipeToDeleteNote(event.note)
+            is NoteListEvent.DeletedNoteRestored -> restoreDeletedNote(event.note)
+            is NoteListEvent.AddNewNoteClicked -> navigateToAddEditScreen()
+            is NoteListEvent.NoteSelected -> navigateToDetailsNoteScreen(event.note)
+            is NoteListEvent.SortButtonClicked -> navigateToSortDialogScreen()
         }
+    }
+
+    private fun onQueryChanged(query: String) {
+        searchQuery.value = query
+    }
+
+    private fun saveSortType(sortType: SortType) = viewModelScope.launch {
+        preferencesManager.saveSortType(sortType)
+    }
+
+    private fun swipeToDeleteNote(note: Note) = viewModelScope.launch {
+        deleteNoteUseCase(note)
+        _noteListEventChannel.send(UiNoteListEvent.ShowUndoDeleteNoteMessage(note))
+    }
+
+    private fun restoreDeletedNote(note: Note) = viewModelScope.launch {
+        restoreDeletedNoteUseCase(note)
+    }
+
+    private fun navigateToAddEditScreen() = viewModelScope.launch {
+        _noteListEventChannel.send(UiNoteListEvent.NavigateToAddEditScreen)
+    }
+
+    private fun navigateToSortDialogScreen() = viewModelScope.launch {
+        _noteListEventChannel.send(UiNoteListEvent.NavigateToSortDialogScreen)
+    }
+
+    private fun navigateToDetailsNoteScreen(note: Note) = viewModelScope.launch {
+        _noteListEventChannel.send(UiNoteListEvent.NavigateToDetailsNoteScreen(note))
     }
 
     sealed class UiNoteListEvent {
         data class ShowUndoDeleteNoteMessage(val note: Note) : UiNoteListEvent()
         data class NavigateToDetailsNoteScreen(val note: Note) : UiNoteListEvent()
-        object NavigateToAddNoteScreen : UiNoteListEvent()
+        object NavigateToAddEditScreen : UiNoteListEvent()
         object NavigateToSortDialogScreen : UiNoteListEvent()
     }
 }

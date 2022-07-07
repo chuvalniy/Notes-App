@@ -1,33 +1,35 @@
 package com.example.feature_note.di
 
-import com.example.feature_note.domain.repository.NoteRepository
 import com.example.feature_note.domain.use_case.*
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ViewModelComponent
+import org.koin.dsl.module
 
-@Module
-@InstallIn(ViewModelComponent::class)
-object DomainModule {
+val noteDomainModule = module {
 
-    @Provides
-    fun provideDeleteNoteUseCase(repository: NoteRepository): DeleteNoteUseCase {
-        return DeleteNoteUseCase(repository = repository)
+    factory {
+        DeleteNoteUseCase(repository = get())
     }
 
-    @Provides
-    fun provideGetAllNotesUseCase(repository: NoteRepository): GetAllNotesUseCase {
-        return GetAllNotesUseCase(repository = repository)
+    factory {
+        GetFilteredNotesUseCase(repository = get())
     }
 
-    @Provides
-    fun provideInsertNoteUseCase(repository: NoteRepository): InsertNoteUseCase {
-        return InsertNoteUseCase(repository = repository)
+    factory {
+        InsertNoteUseCase(repository = get())
     }
 
-    @Provides
-    fun provideUpdateNoteUseCase(repository: NoteRepository): UpdateNoteUseCase {
-        return UpdateNoteUseCase(repository = repository)
+    factory {
+        RestoreDeletedNoteUseCase(repository = get())
+    }
+
+    factory {
+        SynchronizeNotesUseCase(repository = get())
+    }
+
+    factory {
+        UpdateNoteUseCase(repository = get())
+    }
+
+    factory {
+        ValidateTitleUseCase()
     }
 }

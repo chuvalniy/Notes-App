@@ -6,7 +6,11 @@ import kotlinx.coroutines.flow.Flow
 
 interface NoteRepository {
 
-    fun getAllNotes(searchQuery: String, sortType: SortType): Flow<List<Note>>
+    suspend fun synchronizeNotes()
+
+    suspend fun restoreDeletedNote(note: Note)
+
+    fun getFilteredNotes(query: String, sortType: SortType): Flow<List<Note>>
 
     suspend fun insertNote(note: Note)
 

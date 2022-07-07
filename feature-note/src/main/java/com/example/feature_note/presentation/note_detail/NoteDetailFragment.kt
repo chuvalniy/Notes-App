@@ -4,24 +4,27 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.common.ui.BaseFragment
 import com.example.feature_note.R
 import com.example.feature_note.databinding.FragmentNoteDetailBinding
-import dagger.hilt.android.AndroidEntryPoint
+import com.google.android.material.snackbar.Snackbar
+import org.koin.androidx.viewmodel.ext.android.stateViewModel
 
-@AndroidEntryPoint
 class NoteDetailFragment : BaseFragment<FragmentNoteDetailBinding>() {
 
-    private val viewModel: NoteDetailViewModel by viewModels()
-
+    private val viewModel by stateViewModel<NoteDetailViewModel>(state = {
+        val bundle = Bundle()
+        bundle.putParcelable("note", arguments?.getParcelable("note"))
+        bundle
+    })
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupNoteInfoWithUi()
+        setNoteInfoToUi()
 
         observeUiEvents()
 
@@ -31,8 +34,8 @@ class NoteDetailFragment : BaseFragment<FragmentNoteDetailBinding>() {
     private fun observeUiEvents() {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.noteDetailsEvent.collect { event ->
-                when(event) {
-                    is NoteDetailViewModel.UiNoteDetailsEvent.NavigateToDetailsScreen -> {
+                when (event) {
+                    is NoteDetailViewModel.UiNoteDetailsEvent.NavigateToAddEditScreen -> {
                         val action = NoteDetailFragmentDirections.actionDetailToAddEdit(event.note)
                         findNavController().navigate(action)
                     }
@@ -59,7 +62,7 @@ class NoteDetailFragment : BaseFragment<FragmentNoteDetailBinding>() {
         }
     }
 
-    private fun setupNoteInfoWithUi() {
+    private fun setNoteInfoToUi() {
         binding.apply {
             tvTitle.text = viewModel.noteTitle
             tvContent.text = viewModel.noteContent

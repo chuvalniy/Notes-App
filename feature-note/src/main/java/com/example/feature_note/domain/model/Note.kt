@@ -8,10 +8,10 @@ import kotlinx.parcelize.Parcelize
 import java.text.DateFormat
 
 
-@Entity(tableName = "note_db")
+
 @Parcelize
 data class Note(
-    @PrimaryKey val id: Int? = null,
+    val id: String,
     val title: String,
     val content: String,
     val color: String,
@@ -20,7 +20,6 @@ data class Note(
     @IgnoredOnParcel
     val createdDateFormatted: String
         get() = DateFormat.getInstance().format(timestamp)
-
 
     companion object {
         val colors = listOf(

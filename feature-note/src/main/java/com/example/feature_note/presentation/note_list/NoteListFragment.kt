@@ -1,6 +1,7 @@
 package com.example.feature_note.presentation.note_list
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,13 +16,13 @@ import com.example.feature_note.R
 import com.example.feature_note.databinding.FragmentNoteListBinding
 import com.example.feature_note.domain.model.Note
 import com.google.android.material.snackbar.Snackbar
-import dagger.hilt.android.AndroidEntryPoint
+import org.koin.androidx.viewmodel.ext.android.sharedStateViewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-@AndroidEntryPoint
 class NoteListFragment : BaseFragment<FragmentNoteListBinding>() {
 
     private var adapter: NoteListAdapter? = null
-    private val viewModel: NoteListViewModel by activityViewModels()
+    private val viewModel by sharedStateViewModel<NoteListViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -42,8 +43,10 @@ class NoteListFragment : BaseFragment<FragmentNoteListBinding>() {
                     is NoteListViewModel.UiNoteListEvent.ShowUndoDeleteNoteMessage -> {
                         showUndoDeleteNoteMessage(event.note)
                     }
-                    is NoteListViewModel.UiNoteListEvent.NavigateToAddNoteScreen -> {
-                        findNavController().navigate(R.id.action_noteListFragment_to_noteAddFragment)
+                    is NoteListViewModel.UiNoteListEvent.NavigateToAddEditScreen -> {
+                        val action =
+                            NoteListFragmentDirections.actionListToAddEdit()
+                        findNavController().navigate(action)
                     }
                     is NoteListViewModel.UiNoteListEvent.NavigateToDetailsNoteScreen -> {
                         val action = NoteListFragmentDirections.actionListToDetail(event.note)
